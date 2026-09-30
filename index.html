@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Таймлайн проекта «Баба Яга» — AR Камера</title>
-    <!-- Подключаем библиотеку Model-Viewer с поддержкой AR для iPhone и Android -->
+    <title>Таймлайн проекта «Баба Яга» — AR</title>
+    <!-- Подключаем официальный компонент Google Model Viewer -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
         body {
             margin: 0;
             padding: 0;
-            background: #0f0f0f;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #111;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: #fff;
             text-align: center;
         }
 
         header {
             padding: 12px;
-            background: #1a1a1a;
-            border-bottom: 2px solid #ff4757;
+            background: #1c1c1e;
+            border-bottom: 1px solid #333;
         }
 
         h1 {
@@ -27,66 +27,59 @@
             margin: 0;
         }
 
-        /* Контейнер для 3D-сцены и AR */
+        /* Область предпросмотра 3D */
         model-viewer {
             width: 100vw;
-            height: 55vh;
-            background-color: #141414;
+            height: 50vh;
+            background-color: #1a1a1a;
         }
 
-        /* Кнопка запуска камеры */
+        /* Кнопка запуска AR-камеры */
         #ar-button {
-            background: #ff4757;
+            background: #007aff;
             color: white;
             border: none;
-            padding: 14px 26px;
+            padding: 12px 24px;
             font-size: 16px;
-            font-weight: bold;
-            border-radius: 30px;
+            font-weight: 600;
+            border-radius: 25px;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(255, 71, 87, 0.5);
-            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.4);
         }
 
-        #ar-button:active {
-            transform: scale(0.95);
-        }
-
-        /* Панель таймлайна под сценой */
-        .timeline-panel {
-            padding: 15px;
-            background: #1a1a1a;
-            margin: 10px;
+        /* Панель таймлайна */
+        .timeline-container {
+            padding: 20px;
+            background: #1c1c1e;
+            margin: 15px;
             border-radius: 14px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        .timeline-panel p {
-            margin: 0 0 10px 0;
+        .timeline-container p {
+            margin: 0 0 12px 0;
             font-size: 14px;
-            color: #ddd;
+            color: #bbb;
         }
 
-        .stages {
+        .buttons-group {
             display: flex;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
-        .stages button {
-            background: #333;
+        .buttons-group button {
+            background: #2c2c2e;
             color: white;
-            border: 1px solid #ff4757;
-            padding: 8px 14px;
+            border: 1px solid #007aff;
+            padding: 8px 16px;
+            border-radius: 20px;
             font-size: 13px;
-            border-radius: 15px;
             cursor: pointer;
-            transition: background 0.2s;
         }
 
-        .stages button:hover {
-            background: #ff4757;
+        .buttons-group button:active {
+            background: #007aff;
         }
     </style>
 </head>
@@ -97,43 +90,41 @@
     </header>
 
     <!-- 
-      Используем model-viewer с твоей фотографией. 
-      Чтобы картинка отображалась в 3D и AR под углом 45 градусов, 
-      мы задаем начальную ориентацию камеры через атрибуты.
+      Главный компонент AR:
+      - ios-src: файл для iPhone (.usdz)
+      - src: файл для Android (.glb)
+      Если этих файлов нет в папке сайта, айфон сбросит страницу. 
     -->
     <model-viewer 
-        id="ar-card"
-        src="" 
-        ios-src=""
-        alt="Избушка Бабы Яга"
+        id="babayaga-viewer"
+        src="izbushka_card.glb" 
+        ios-src="izbushka_card.usdz"
+        alt="Избушка Бабы Яги"
         ar
-        ar-modes="scene-viewer quick-look webxr"
+        ar-modes="quick-look scene-viewer webxr"
         camera-controls
-        touch-action="pan-y"
         orientation="0deg 45deg 0deg"
-        exposure="1"
         shadow-intensity="1">
         
-        <!-- Кнопка, по которой открывается камера телефона -->
+        <!-- Кнопка вызова камеры -->
         <button slot="ar-button" id="ar-button">
-            📷 Открыть камеру и ходить вокруг
+            📦 Запустить AR камеру
         </button>
     </model-viewer>
 
-    <!-- Блок таймлайна истории -->
-    <div class="timeline-panel">
-        <p id="stage-desc"><b>Этап 1:</b> Старт проекта и создание фотокарточки</p>
-        <div class="stages">
-            <button onclick="changeStage(1, 'Старт проекта и создание фотокарточки')">Шаг 1</button>
-            <button onclick="changeStage(2, 'Разработка концепции избушки')">Шаг 2</button>
-            <button onclick="changeStage(3, 'Финальный релиз проекта')">Шаг 3</button>
+    <!-- Блок таймлайна -->
+    <div class="timeline-container">
+        <p id="stage-text"><b>Этап 1:</b> Зарождение идеи</p>
+        <div class="buttons-group">
+            <button onclick="setStage(1, 'Зарождение идеи')">Шаг 1</button>
+            <button onclick="setStage(2, 'Создание прототипа')">Шаг 2</button>
+            <button onclick="setStage(3, 'Финальный проект')">Шаг 3</button>
         </div>
     </div>
 
     <script>
-        // Функция переключения текста этапов таймлайна
-        function changeStage(num, text) {
-            document.getElementById('stage-desc').innerHTML = `<b>Этап ${num}:</b> ${text}`;
+        function setStage(step, text) {
+            document.getElementById('stage-text').innerHTML = `<b>Этап ${step}:</b> ${text}`;
         }
     </script>
 
