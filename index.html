@@ -3,84 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR Таймлайн — Проект Баба Яга</title>
-    <!-- Подключаем библиотеку для работы с 3D и AR в браузере -->
+    <title>Таймлайн проекта «Баба Яга» — AR</title>
+    <!-- Подключаем официальный компонент для 3D и AR -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
         body {
             margin: 0;
             padding: 0;
-            background: #111;
-            font-family: Arial, sans-serif;
+            background: #121212;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #fff;
             text-align: center;
         }
 
-        h1 {
-            font-size: 20px;
-            margin: 15px 0;
+        header {
+            padding: 15px;
+            background: #1f1f1f;
+            border-bottom: 2px solid #ff4757;
         }
 
-        /* Сам контейнер для 3D/AR сцены */
+        h1 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        /* Контейнер для 3D/AR сцены */
         model-viewer {
-            width: 100vw;
-            height: 70vh;
+            width: 100%;
+            height: 60vh;
             background-color: #1a1a1a;
         }
 
-        /* Кнопка запуска AR (камеры) */
+        /* Кнопка запуска камеры (AR) */
         #ar-button {
             background: #ff4757;
             color: white;
             border: none;
-            padding: 14px 28px;
+            padding: 12px 24px;
             font-size: 16px;
             font-weight: bold;
-            border-radius: 30px;
+            border-radius: 25px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
-            margin-top: 15px;
+            transition: 0.2s;
         }
 
         #ar-button:active {
             transform: scale(0.95);
         }
 
-        .info {
+        .timeline-info {
+            padding: 15px;
+            background: #1a1a1a;
+            margin: 10px;
+            border-radius: 12px;
+            display: inline-block;
+            max-width: 90%;
+        }
+
+        .timeline-info p {
+            margin: 5px 0;
+            color: #ccc;
             font-size: 14px;
-            color: #aaa;
-            padding: 0 20px;
-            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
-    <h1>Проект «Баба Яга» в AR</h1>
-    
-    <!-- Компонент для отображения 3D-модели / фото с наклоном и поддержкой камеры телефонов -->
-    <!-- (Здесь используется демонстрационная 3D-модель, в будущем заменим на твой объект/фото) -->
-    <span id="ar-view">
-        <model-viewer 
-            id="babayaga-model"
-            src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
-            ios-src="https://modelviewer.dev/shared-assets/models/Astronaut.usdz"
-            alt="Проект Баба Яга"
-            ar
-            ar-modes="scene-viewer quick-look webxr"
-            camera-controls
-            auto-rotate
-            shadow-intensity="1">
-            
-            <!-- Кнопка, которая появляется прямо на экране для перехода в режим камеры -->
-            <button slot="ar-button" id="ar-button">
-                📷 Включить камеру и ходить вокруг
-            </button>
-        </model-viewer>
-    </span>
+    <header>
+        <h1>Проект «Баба Яга» — AR Таймлайн</h1>
+    </header>
 
-    <div class="info">
-        Нажми кнопку, наведите камеру на пол, и обойди проект своими ногами!
+    <!-- Сцена с избушкой / моделью -->
+    <model-viewer 
+        id="babayaga-viewer"
+        src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
+        ios-src="https://modelviewer.dev/shared-assets/models/Astronaut.usdz"
+        alt="Избушка Бабы Яги"
+        ar
+        ar-modes="scene-viewer quick-look webxr"
+        camera-controls
+        auto-rotate
+        shadow-intensity="1">
+        
+        <!-- Кнопка перехода в камеру телефона -->
+        <button slot="ar-button" id="ar-button">
+            📷 Открыть камеру и ходить вокруг
+        </button>
+    </model-viewer>
+
+    <div class="timeline-info">
+        <p><b>Текущий этап:</b> Запуск проекта</p>
+        <p>Используется фото: <code>izbushka_card.jpg</code></p>
+        <p style="color: #ff4757; font-size: 12px;">Нажми кнопку выше, чтобы запустить AR на телефоне!</p>
     </div>
 
 </body>
