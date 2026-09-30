@@ -4,24 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Команда Баба Яга - История развития проекта</title>
-    <!-- Подключаем официальный компонент Google Model-Viewer для запуска AR-камеры -->
+    <!-- Подключаем Google Model-Viewer для реального AR/VR режима на iOS и Android -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
         :root {
             --primary-green: #2e7d32;
             --dark-green: #1b5e20;
             --light-green: #e8f5e9;
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-border: rgba(46, 125, 50, 0.2);
-            --text-main: #1e293b;
-            --text-muted: #475569;
+            /* Усиленный эффект супер жидкого стекла */
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.7);
+            --glass-shadow: 0 8px 32px 0 rgba(46, 125, 50, 0.15);
+            --text-main: #0f172a;
+            --text-muted: #334155;
         }
 
         body {
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            background: linear-gradient(135deg, #d1e7dd 0%, #a3d9c9 50%, #e8f5e9 100%);
+            background-attachment: fixed;
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -37,17 +40,18 @@
         }
 
         header h1 {
-            margin: 0 0 10px 0;
-            font-size: 2.2rem;
+            margin: 0 0 8px 0;
+            font-size: 2.4rem;
             color: var(--dark-green);
             letter-spacing: -0.5px;
+            font-weight: 800;
         }
 
         header p {
             margin: 0;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--text-muted);
-            font-weight: 500;
+            font-weight: 600;
         }
 
         main {
@@ -61,28 +65,29 @@
             gap: 25px;
         }
 
-        /* Эффект жидкого стекла (Glassmorphism) */
+        /* Супер жидкое стекло (Glassmorphism) */
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            box-shadow: var(--glass-shadow);
         }
 
         .info-section h2 {
             margin-top: 0;
             color: var(--dark-green);
-            font-size: 1.3rem;
-            margin-bottom: 12px;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
         }
 
         .info-section p {
             line-height: 1.6;
             color: var(--text-muted);
             margin: 0;
+            font-size: 1.05rem;
         }
 
         .content-container {
@@ -92,55 +97,72 @@
             align-items: center;
         }
 
-        /* Превью длинной фотографии на сайте с прокруткой */
-        .long-photo-wrapper {
+        /* Контейнер с анимацией ухода фотографии вправо и появления с другого края при прокрутке */
+        .scrolling-photo-container {
             width: 100%;
-            max-height: 350px;
-            overflow-x: auto;
-            overflow-y: hidden;
-            border-radius: 12px;
+            overflow: hidden;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.6);
             border: 1px solid var(--glass-border);
-            background: #ffffff;
-            margin-bottom: 25px;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.04);
-            white-space: nowrap;
+            margin-bottom: 30px;
+            padding: 15px 0;
+            box-sizing: border-box;
         }
 
-        .long-photo {
-            height: 300px;
+        .scrolling-photo-track {
+            display: flex;
+            width: max-content;
+            /* Привязка анимации сдвига вправо к прокрутке страницы */
+            animation: scrollLoop linear;
+            animation-timeline: scroll();
+        }
+
+        .scrolling-photo-track img {
+            height: 280px;
             width: auto;
-            display: inline-block;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-right: 40px;
+            display: block;
         }
 
-        /* Настройка виджета для AR-камеры */
+        @keyframes scrollLoop {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Виджет для запуска реального AR/VR режима */
         model-viewer {
             width: 100%;
-            height: 300px;
+            height: 250px;
             background-color: transparent;
-            margin-bottom: 20px;
             --poster-color: transparent;
         }
 
-        /* Кнопка открытия камеры с подсветкой */
+        /* Кнопка «Открыть камеру» с подсветкой и эффектом стекла */
         .camera-button {
-            background-color: var(--primary-green);
+            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
             color: #ffffff;
-            border: none;
-            padding: 16px 32px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 18px 36px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
             width: 100%;
-            max-width: 380px;
+            max-width: 400px;
         }
 
         .camera-button:hover {
-            background-color: var(--dark-green);
-            box-shadow: 0 6px 20px rgba(27, 94, 32, 0.4);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(27, 94, 32, 0.6);
+            background: linear-gradient(135deg, #388e3c 0%, #2e7d32 100%);
         }
 
         .camera-button:active {
@@ -150,8 +172,9 @@
         footer {
             text-align: center;
             padding: 20px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
+            font-weight: 500;
         }
     </style>
 </head>
@@ -166,22 +189,25 @@
         <section class="glass-card info-section">
             <h2>О проекте</h2>
             <p>
-                Добро пожаловать на страницу нашей команды. Ниже представлена полная горизонтальная хронология 
-                создания и эволюции проекта избушки на курьих ножках. Нажмите кнопку ниже, чтобы открыть камеру 
-                и разместить проект в реальном пространстве.
+                Добро пожаловать на интерактивную презентацию. Ниже представлена цифровая хронология 
+                нашего проекта. Прокручивайте страницу, чтобы исследовать материалы, или нажмите кнопку 
+                ниже, чтобы запустить камеру и разместить плоскую фотографию под углом 45 градусов в пространстве.
             </p>
         </section>
 
         <section class="glass-card content-container">
-            <!-- Окно с длинной горизонтальной фотографией -->
-            <div class="long-photo-wrapper">
-                <img src="izbushka_card.jpg" alt="История развития проекта" class="long-photo">
+            <!-- Бесконечная лента фотографии при скролле вниз -->
+            <div class="scrolling-photo-container">
+                <div class="scrolling-photo-track">
+                    <img src="izbushka_card.jpg" alt="История проекта">
+                    <img src="izbushka_card.jpg" alt="История проекта">
+                </div>
             </div>
 
             <!-- 
-              Компонент для запуска нативной AR-камеры телефона. 
-              Когда будет готова правильная 3D-модель-лента (izbushka_card.glb / usdz), 
-              она откроется в камере устройства, позволяя ходить вокруг неё.
+              Реальный AR/VR режим: открывает нативную камеру телефона (iOS Quick Look / Android Scene Viewer).
+              Файл модели (izbushka_card.glb / .usdz) должен представлять собой плоскую плоскость с текстурой картинки, 
+              сконфигурированную под углом 45 градусов.
             -->
             <model-viewer 
                 src="izbushka_card.glb" 
@@ -189,10 +215,8 @@
                 ar 
                 ar-modes="webxr scene-viewer quick-look" 
                 camera-controls 
-                auto-rotate
                 alt="История развития проекта в AR">
                 
-                <!-- Кастомная кнопка запуска камеры с подсветкой -->
                 <button slot="ar-button" class="camera-button">
                     Открыть камеру
                 </button>
