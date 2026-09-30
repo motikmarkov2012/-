@@ -3,175 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Таймлайн проекта «Баба Яга»</title>
+    <title>Таймлайн проекта «Баба Яга» — AR Камера</title>
+    <!-- Подключаем библиотеку Model-Viewer с поддержкой AR для iPhone и Android -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
         body {
             margin: 0;
             padding: 0;
-            background: #121212;
+            background: #0f0f0f;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #fff;
             text-align: center;
-            overflow-x: hidden;
         }
 
         header {
-            padding: 15px;
-            background: #1f1f1f;
+            padding: 12px;
+            background: #1a1a1a;
             border-bottom: 2px solid #ff4757;
         }
 
         h1 {
-            font-size: 18px;
+            font-size: 16px;
             margin: 0;
         }
 
-        /* 3D-сцена, в которой живет фотография */
-        .scene {
+        /* Контейнер для 3D-сцены и AR */
+        model-viewer {
             width: 100vw;
             height: 55vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            perspective: 1200px; /* Глубина 3D-пространства */
-            margin-top: 20px;
+            background-color: #141414;
         }
 
-        /* Сама карточка с фотографией */
-        .photo-card {
-            width: 320px;
-            height: 440px;
-            background: #222;
-            border-radius: 16px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 71, 87, 0.3);
-            overflow: hidden;
-            /* Твой наклон под 45 градусов (можешь менять градусы по вкусу) */
-            transform: rotateX(15deg) rotateY(45deg);
-            transition: transform 0.3s ease-out;
-            cursor: grab;
-        }
-
-        .photo-card:active {
-            cursor: grabbing;
-        }
-
-        .photo-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Чтобы фото заполнило карточку без искажений */
-            pointer-events: none;
-        }
-
-        /* Панель управления и таймлайн */
-        .controls {
-            padding: 15px;
-            background: #1a1a1a;
-            margin: 20px auto;
-            max-width: 90%;
-            border-radius: 12px;
-        }
-
-        .controls p {
-            margin: 5px 0 15px 0;
-            color: #ccc;
-            font-size: 14px;
-        }
-
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        button {
+        /* Кнопка запуска камеры */
+        #ar-button {
             background: #ff4757;
             color: white;
             border: none;
-            padding: 10px 18px;
-            font-size: 14px;
+            padding: 14px 26px;
+            font-size: 16px;
             font-weight: bold;
-            border-radius: 20px;
+            border-radius: 30px;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
-            transition: 0.2s;
+            box-shadow: 0 4px 20px rgba(255, 71, 87, 0.5);
+            transition: transform 0.2s;
         }
 
-        button:hover {
-            background: #ff6b81;
-        }
-
-        button:active {
+        #ar-button:active {
             transform: scale(0.95);
+        }
+
+        /* Панель таймлайна под сценой */
+        .timeline-panel {
+            padding: 15px;
+            background: #1a1a1a;
+            margin: 10px;
+            border-radius: 14px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .timeline-panel p {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #ddd;
+        }
+
+        .stages {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .stages button {
+            background: #333;
+            color: white;
+            border: 1px solid #ff4757;
+            padding: 8px 14px;
+            font-size: 13px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .stages button:hover {
+            background: #ff4757;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Проект «Баба Яга» — История разработки</h1>
+        <h1>Проект «Баба Яга» — AR Таймлайн</h1>
     </header>
 
-    <!-- Трехмерная сцена -->
-    <div class="scene" id="scene">
-        <div class="photo-card" id="photoCard">
-            <!-- Твоя фотография -->
-            <img src="izbushka_card.jpg" alt="Избушка Бабы Яги">
-        </div>
-    </div>
+    <!-- 
+      Используем model-viewer с твоей фотографией. 
+      Чтобы картинка отображалась в 3D и AR под углом 45 градусов, 
+      мы задаем начальную ориентацию камеры через атрибуты.
+    -->
+    <model-viewer 
+        id="ar-card"
+        src="" 
+        ios-src=""
+        alt="Избушка Бабы Яга"
+        ar
+        ar-modes="scene-viewer quick-look webxr"
+        camera-controls
+        touch-action="pan-y"
+        orientation="0deg 45deg 0deg"
+        exposure="1"
+        shadow-intensity="1">
+        
+        <!-- Кнопка, по которой открывается камера телефона -->
+        <button slot="ar-button" id="ar-button">
+            📷 Открыть камеру и ходить вокруг
+        </button>
+    </model-viewer>
 
-    <!-- Блок таймлайна и управления обходом -->
-    <div class="controls">
-        <p id="step-title"><b>Этап 1:</b> Концепт и создание карточки</p>
-        <div class="btn-group">
-            <button onclick="setStage(1, 'Концепт и создание карточки', '15deg', '45deg')">Шаг 1</button>
-            <button onclick="setStage(2, 'Первые доработки избушки', '-15deg', '135deg')">Шаг 2</button>
-            <button onclick="setStage(3, 'Финальный вид проекта', '0deg', '0deg')">Шаг 3 (Анфас)</button>
+    <!-- Блок таймлайна истории -->
+    <div class="timeline-panel">
+        <p id="stage-desc"><b>Этап 1:</b> Старт проекта и создание фотокарточки</p>
+        <div class="stages">
+            <button onclick="changeStage(1, 'Старт проекта и создание фотокарточки')">Шаг 1</button>
+            <button onclick="changeStage(2, 'Разработка концепции избушки')">Шаг 2</button>
+            <button onclick="changeStage(3, 'Финальный релиз проекта')">Шаг 3</button>
         </div>
     </div>
 
     <script>
-        const card = document.getElementById('photoCard');
-        const stepTitle = document.getElementById('step-title');
-
-        // Функция переключения шагов таймлайна (поворот «камеры» / объекта)
-        function setStage(stepNum, titleText, rotateX, rotateY) {
-            stepTitle.innerHTML = `<b>Этап ${stepNum}:</b> ${titleText}`;
-            card.style.transform = `rotateX(${rotateX}) rotateY(${rotateY})`;
+        // Функция переключения текста этапов таймлайна
+        function changeStage(num, text) {
+            document.getElementById('stage-desc').innerHTML = `<b>Этап ${num}:</b> ${text}`;
         }
-
-        // Интерактив: чтобы пользователь на телефоне или компьютере мог пальцем/мышкой крутить карточку вокруг своей оси
-        let isDragging = false;
-        let startX, startY;
-        let currentX = 45; // Начальный поворот по Y (45 градусов)
-        let currentY = 15; // Начальный поворот по X (15 градусов)
-
-        const scene = document.getElementById('scene');
-
-        scene.addEventListener('pointerdown', (e) => {
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-        });
-
-        window.addEventListener('pointermove', (e) => {
-            if (!isDragging) return;
-            
-            const deltaX = e.clientX - startX;
-            const deltaY = e.clientY - startY;
-            
-            currentX += deltaX * 0.5;
-            currentY -= deltaY * 0.5;
-
-            card.style.transform = `rotateX(${currentY}deg) rotateY(${currentX}deg)`;
-
-            startX = e.clientX;
-            startY = e.clientY;
-        });
-
-        window.addEventListener('pointerup', () => {
-            isDragging = false;
-        });
     </script>
 
 </body>
