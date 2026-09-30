@@ -1,537 +1,118 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Баба Яга</title>
-
-<style>
-
-/* =====================================================
-   ОСНОВА
-===================================================== */
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-
-    color: #20252b;
-
-    background: #f7f9fb;
-
-    overflow-x: hidden;
-}
-
-
-/* =====================================================
-   ВЕРХНЯЯ ПАНЕЛЬ
-===================================================== */
-
-.top {
-    position: fixed;
-
-    top: 0;
-    left: 0;
-    right: 0;
-
-    height: 70px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 0 28px;
-
-    background: rgba(255,255,255,.85);
-
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-
-    border-bottom: 1px solid #e3e7eb;
-
-    z-index: 50;
-}
-
-.logo {
-    text-decoration: none;
-
-    color: #1468d5;
-
-    font-weight: 700;
-
-    font-size: 20px;
-}
-
-.nav {
-    display: flex;
-
-    gap: 8px;
-}
-
-.nav a {
-    text-decoration: none;
-
-    color: #68717b;
-
-    font-size: 14px;
-
-    padding: 10px 15px;
-
-    border-radius: 12px;
-
-    transition: .2s;
-}
-
-.nav a:hover {
-    background: #edf4ff;
-
-    color: #1468d5;
-}
-
-
-/* =====================================================
-   ГЛАВНЫЙ ЭКРАН
-===================================================== */
-
-.hero {
-    min-height: 100vh;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 120px 25px 80px;
-}
-
-.hero-inner {
-    width: min(1000px, 100%);
-
-    text-align: center;
-}
-
-.hero h1 {
-    font-size: clamp(60px, 11vw, 120px);
-
-    line-height: .9;
-
-    letter-spacing: -7px;
-
-    color: #1268d8;
-}
-
-.hero p {
-    margin-top: 25px;
-
-    color: #6d7781;
-
-    font-size: 17px;
-}
-
-
-/* =====================================================
-   КОНТЕЙНЕР
-===================================================== */
-
-.container {
-    width: min(1000px, calc(100% - 40px));
-
-    margin: auto;
-}
-
-section {
-    padding: 90px 0;
-}
-
-.section-title {
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 22px;
-}
-
-.section-title h2 {
-    font-size: 29px;
-
-    letter-spacing: -.8px;
-}
-
-.section-number {
-    color: #1268d8;
-
-    font-size: 13px;
-
-    font-weight: 700;
-}
-
-
-/* =====================================================
-   ИСТОРИЯ
-===================================================== */
-
-.history {
-    border-top: 1px solid #dfe4e8;
-}
-
-.history-item {
-    display: grid;
-
-    grid-template-columns: 65px 1fr;
-
-    gap: 20px;
-
-    padding: 24px 0;
-
-    border-bottom: 1px solid #dfe4e8;
-}
-
-.history-number {
-    color: #1468d5;
-
-    font-size: 14px;
-
-    font-weight: 700;
-}
-
-.history-item h3 {
-    font-size: 19px;
-
-    margin-bottom: 6px;
-}
-
-.history-item p {
-    color: #747e87;
-
-    line-height: 1.5;
-
-    font-size: 15px;
-}
-
-
-/* =====================================================
-   ТАЙМЛАЙН
-===================================================== */
-
-.timeline-wrapper {
-    overflow: hidden;
-
-    background: #fff;
-
-    border: 1px solid #dde3e8;
-
-    border-radius: 18px;
-
-    box-shadow:
-        0 12px 40px rgba(0,0,0,.05);
-}
-
-.timeline {
-    width: max-content;
-
-    display: flex;
-
-    gap: 30px;
-
-    padding: 30px;
-
-    min-height: 420px;
-
-    align-items: center;
-
-    cursor: grab;
-
-    user-select: none;
-
-    touch-action: pan-y;
-}
-
-.timeline:active {
-    cursor: grabbing;
-}
-
-.timeline-image {
-    height: 350px;
-
-    width: auto;
-
-    max-width: none;
-
-    display: block;
-
-    border-radius: 14px;
-
-    box-shadow:
-        0 12px 35px rgba(0,0,0,.14);
-}
-
-
-/* =====================================================
-   КНОПКА AR
-===================================================== */
-
-.camera-section {
-    text-align: center;
-
-    padding: 110px 0 160px;
-}
-
-.camera-button {
-    border: none;
-
-    padding: 18px 30px;
-
-    border-radius: 13px;
-
-    background: #1268d8;
-
-    color: white;
-
-    font-size: 16px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 10px 30px rgba(18,104,216,.22);
-
-    transition: .2s;
-}
-
-.camera-button:hover {
-    background: #0d5ec5;
-
-    transform: translateY(-2px);
-}
-
-.camera-button:active {
-    transform: scale(.96);
-
-    box-shadow:
-        0 0 0 6px rgba(18,104,216,.12);
-}
-
-
-/* =====================================================
-   AR OVERLAY
-===================================================== */
-
-#arUI {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 100;
-
-    pointer-events: none;
-}
-
-#arUI.hidden {
-    display: none;
-}
-
-.ar-exit {
-    position: absolute;
-
-    top: 22px;
-    right: 22px;
-
-    width: 48px;
-    height: 48px;
-
-    border-radius: 50%;
-
-    border: 1px solid rgba(255,255,255,.35);
-
-    background: rgba(0,0,0,.45);
-
-    backdrop-filter: blur(12px);
-
-    color: white;
-
-    font-size: 28px;
-
-    pointer-events: auto;
-
-    cursor: pointer;
-}
-
-.ar-info {
-    position: absolute;
-
-    left: 50%;
-    bottom: 25px;
-
-    transform: translateX(-50%);
-
-    padding: 11px 18px;
-
-    border-radius: 20px;
-
-    background: rgba(0,0,0,.45);
-
-    backdrop-filter: blur(12px);
-
-    color: white;
-
-    font-size: 13px;
-
-    white-space: nowrap;
-
-    pointer-events: none;
-}
-
-
-/* =====================================================
-   СООБЩЕНИЕ
-===================================================== */
-
-.message {
-    position: fixed;
-
-    left: 50%;
-    top: 50%;
-
-    transform: translate(-50%, -50%);
-
-    width: min(430px, calc(100% - 40px));
-
-    padding: 25px;
-
-    background: white;
-
-    border-radius: 18px;
-
-    border: 1px solid #dce2e7;
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,.15);
-
-    text-align: center;
-
-    z-index: 200;
-
-    display: none;
-}
-
-.message.show {
-    display: block;
-}
-
-.message h3 {
-    margin-bottom: 10px;
-}
-
-.message p {
-    color: #6e7780;
-
-    line-height: 1.5;
-
-    font-size: 14px;
-}
-
-.message button {
-    margin-top: 18px;
-
-    border: none;
-
-    background: #1468d5;
-
-    color: white;
-
-    padding: 10px 18px;
-
-    border-radius: 10px;
-
-    cursor: pointer;
-}
-
-
-/* =====================================================
-   МОБИЛЬНЫЙ
-===================================================== */
-
-@media(max-width:700px) {
-
-    .top {
-        height: 60px;
-
-        padding: 0 15px;
-    }
-
-    .nav {
-        display: none;
-    }
-
-    .hero {
-        padding-top: 90px;
-    }
-
-    .hero h1 {
-        letter-spacing: -4px;
-    }
-
-    .timeline {
-        min-height: 320px;
-
-        padding: 25px;
-    }
-
-    .timeline-image {
-        height: 260px;
-    }
-
-    .ar-info {
-        font-size: 11px;
-
-        max-width: calc(100% - 40px);
-
-        text-align: center;
-    }
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Баба Яга — AR</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                sans-serif;
+        }
+
+        /*
+         * Скрываем кнопку Three.js до запуска AR.
+         * Сам canvas появляется поверх экрана.
+         */
+        #ar-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 30;
+            display: none;
+        }
+
+        #ar-canvas.active {
+            display: block;
+        }
+
+        /*
+         * UI поверх камеры
+         */
+        #ar-ui {
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            pointer-events: none;
+            display: none;
+        }
+
+        #ar-ui.active {
+            display: block;
+        }
+
+        #ar-close {
+            pointer-events: auto;
+        }
+
+        #ar-hint {
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 
-<body>
+<body
+    class="
+        bg-zinc-950
+        text-zinc-100
+        h-screen
+        w-screen
+        overflow-hidden
+        flex
+        flex-col
+        justify-between
+        select-none
+    "
+>
 
 
 <!-- =====================================================
-     НАВИГАЦИЯ
+     ШАПКА
 ===================================================== -->
 
-<header class="top">
+<header
+    class="
+        w-full
+        p-6
+        flex
+        justify-between
+        items-center
+        border-b
+        border-zinc-900
+        z-10
+    "
+>
 
-    <a href="#" class="logo">
+    <h1
+        class="
+            text-xs
+            tracking-widest
+            uppercase
+            text-zinc-500
+        "
+    >
         Баба Яга
-    </a>
+    </h1>
 
-    <nav class="nav">
-        <a href="#history">
-            История
-        </a>
 
-        <a href="#timeline">
-            Таймлайн
-        </a>
-
-        <a href="#camera">
-            Камера
-        </a>
-    </nav>
+    <span
+        class="
+            text-xs
+            text-blue-500
+        "
+    >
+        AR
+    </span>
 
 </header>
 
@@ -541,263 +122,179 @@ section {
      ГЛАВНЫЙ ЭКРАН
 ===================================================== -->
 
-<header class="hero">
-
-    <div class="hero-inner">
-
-        <h1>
-            БАБА ЯГА
-        </h1>
-
-        <p>
-            Робототехнический проект
-        </p>
-
-    </div>
-
-</header>
-
-
-
-<main class="container">
-
-
-<!-- =====================================================
-     ИСТОРИЯ
-===================================================== -->
-
-<section id="history">
-
-    <div class="section-title">
-
-        <h2>
-            История проекта
-        </h2>
-
-        <span class="section-number">
-            01
-        </span>
-
-    </div>
-
-
-    <div class="history">
-
-
-        <div class="history-item">
-
-            <span class="history-number">
-                01
-            </span>
-
-            <div>
-
-                <h3>
-                    Идея
-                </h3>
-
-                <p>
-                    Создание проекта и первые разработки.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="history-item">
-
-            <span class="history-number">
-                02
-            </span>
-
-            <div>
-
-                <h3>
-                    Разработка
-                </h3>
-
-                <p>
-                    Конструкция, электроника и программирование.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="history-item">
-
-            <span class="history-number">
-                03
-            </span>
-
-            <div>
-
-                <h3>
-                    Испытания
-                </h3>
-
-                <p>
-                    Тестирование и совершенствование проекта.
-                </p>
-
-            </div>
-
-        </div>
-
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     ТАЙМЛАЙН
-===================================================== -->
-
-<section id="timeline">
-
-    <div class="section-title">
-
-        <h2>
-            Таймлайн
-        </h2>
-
-        <span class="section-number">
-            02
-        </span>
-
-    </div>
-
-
-    <div class="timeline-wrapper">
-
-        <div
-            class="timeline"
-            id="timelineTrack"
-        >
-
-            <!--
-                ВРЕМЕННАЯ ЗАГЛУШКА
-
-                Позже сюда можно поставить одну
-                огромную горизонтальную фотографию.
-            -->
-
-            <img
-                src="izbushka_card.jpg"
-                class="timeline-image"
-                draggable="false"
-                alt=""
-            >
-
-            <img
-                src="izbushka_card.jpg"
-                class="timeline-image"
-                draggable="false"
-                alt=""
-            >
-
-            <img
-                src="izbushka_card.jpg"
-                class="timeline-image"
-                draggable="false"
-                alt=""
-            >
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     AR КАМЕРА
-===================================================== -->
-
-<section
-    id="camera"
-    class="camera-section"
+<main
+    id="welcome-screen"
+    class="
+        flex-1
+        flex
+        flex-col
+        items-center
+        justify-center
+        px-4
+    "
 >
 
-    <div class="section-title">
-
-        <h2>
-            3D просмотр
-        </h2>
-
-        <span class="section-number">
-            03
-        </span>
-
-    </div>
-
-
     <button
-        id="openAR"
-        class="camera-button"
+        id="open-ar-btn"
+        class="
+            px-8
+            py-4
+            bg-blue-600
+            hover:bg-blue-500
+            text-white
+            text-sm
+            font-medium
+            tracking-wide
+            transition-colors
+            shadow-lg
+            shadow-blue-950/50
+        "
     >
-        Открыть камеру
+        Запустить камеру
     </button>
-
-</section>
-
 
 </main>
 
 
 
 <!-- =====================================================
-     UI ДЛЯ AR
+     AR CANVAS
+===================================================== -->
+
+<canvas
+    id="ar-canvas"
+></canvas>
+
+
+
+<!-- =====================================================
+     UI ПОВЕРХ AR
 ===================================================== -->
 
 <div
-    id="arUI"
-    class="hidden"
+    id="ar-ui"
 >
 
+
+    <!-- Кнопка выхода -->
+
     <button
-        id="exitAR"
-        class="ar-exit"
+        id="ar-close"
+        class="
+            absolute
+            top-5
+            right-5
+            w-12
+            h-12
+            rounded-full
+            bg-black/50
+            border
+            border-zinc-700
+            text-white
+            text-xl
+            backdrop-blur-md
+        "
     >
-        ×
+        ✕
     </button>
 
-    <div class="ar-info">
-        Ходи вокруг фотографии — она находится в пространстве
+
+    <!-- Подсказка -->
+
+    <div
+        id="ar-hint"
+        class="
+            absolute
+            bottom-6
+            left-1/2
+            -translate-x-1/2
+            bg-black/50
+            border
+            border-zinc-800
+            px-5
+            py-3
+            text-xs
+            text-zinc-300
+            backdrop-blur-md
+            whitespace-nowrap
+        "
+    >
+        Ходи вокруг фотографии
     </div>
+
 
 </div>
 
 
 
 <!-- =====================================================
-     ОШИБКА / НЕПОДДЕРЖИВАЕМОЕ УСТРОЙСТВО
+     СООБЩЕНИЕ
 ===================================================== -->
 
 <div
     id="message"
-    class="message"
+    class="
+        fixed
+        inset-0
+        z-50
+        bg-black/80
+        hidden
+        items-center
+        justify-center
+        px-5
+    "
 >
 
-    <h3 id="messageTitle">
-        AR недоступен
-    </h3>
-
-    <p id="messageText">
-        Это устройство или браузер не поддерживает
-        настоящий WebXR AR-режим.
-    </p>
-
-    <button
-        id="messageClose"
+    <div
+        class="
+            bg-zinc-900
+            border
+            border-zinc-800
+            p-6
+            max-w-sm
+            w-full
+            shadow-2xl
+        "
     >
-        Закрыть
-    </button>
+
+        <h2
+            id="message-title"
+            class="
+                text-lg
+                font-medium
+                mb-3
+            "
+        >
+            AR недоступен
+        </h2>
+
+
+        <p
+            id="message-text"
+            class="
+                text-sm
+                text-zinc-400
+                leading-6
+            "
+        >
+        </p>
+
+
+        <button
+            id="message-close"
+            class="
+                mt-5
+                px-5
+                py-2.5
+                bg-blue-600
+                hover:bg-blue-500
+                text-sm
+            "
+        >
+            Закрыть
+        </button>
+
+    </div>
 
 </div>
 
@@ -809,48 +306,84 @@ section {
 
 <script type="module">
 
-/*
-    Three.js используется только для 3D-сцены.
-    Камеру реального мира предоставляет WebXR.
-*/
+import * as THREE from
+"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
-
-import * as THREE
-    from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
 
 /* =====================================================
-   ЭЛЕМЕНТЫ
+   ELEMENTS
 ===================================================== */
 
-const openAR =
-    document.getElementById("openAR");
+const openArBtn =
+    document.getElementById("open-ar-btn");
 
-const exitAR =
-    document.getElementById("exitAR");
+const welcomeScreen =
+    document.getElementById("welcome-screen");
+
+const canvas =
+    document.getElementById("ar-canvas");
 
 const arUI =
-    document.getElementById("arUI");
+    document.getElementById("ar-ui");
+
+const closeBtn =
+    document.getElementById("ar-close");
 
 const message =
     document.getElementById("message");
 
 const messageTitle =
-    document.getElementById("messageTitle");
+    document.getElementById("message-title");
 
 const messageText =
-    document.getElementById("messageText");
+    document.getElementById("message-text");
 
 const messageClose =
-    document.getElementById("messageClose");
+    document.getElementById("message-close");
+
 
 
 /* =====================================================
-   THREE.JS
+   THREE
 ===================================================== */
+
+const renderer =
+    new THREE.WebGLRenderer({
+
+        canvas: canvas,
+
+        antialias: true,
+
+        alpha: true
+
+    });
+
+
+renderer.setPixelRatio(
+    Math.min(
+        window.devicePixelRatio,
+        2
+    )
+);
+
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
+
+/*
+ * Включаем WebXR
+ */
+
+renderer.xr.enabled = true;
+
+
 
 const scene =
     new THREE.Scene();
+
 
 
 const camera =
@@ -863,124 +396,101 @@ const camera =
     );
 
 
-const renderer =
-    new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: true
-    });
+
+/* =====================================================
+   ФОТО
+===================================================== */
+
+const loader =
+    new THREE.TextureLoader();
 
 
-renderer.setPixelRatio(
-    Math.min(window.devicePixelRatio, 2)
-);
-
-renderer.setSize(
-    window.innerWidth,
-    window.innerHeight
-);
+const photoTexture =
+    loader.load(
+        "izbushka_card.jpg"
+    );
 
 
-/*
-    WebXR должен быть включён.
-*/
+photoTexture.colorSpace =
+    THREE.SRGBColorSpace;
 
-renderer.xr.enabled = true;
-
-
-/*
-    Сначала canvas скрыт,
-    потому что до AR нам его не нужно показывать.
-*/
-
-renderer.domElement.style.position =
-    "fixed";
-
-renderer.domElement.style.left =
-    "0";
-
-renderer.domElement.style.top =
-    "0";
-
-renderer.domElement.style.width =
-    "100%";
-
-renderer.domElement.style.height =
-    "100%";
-
-renderer.domElement.style.zIndex =
-    "0";
-
-document.body.appendChild(
-    renderer.domElement
-);
 
 
 /* =====================================================
-   ОБЪЕКТ
+   ОБЪЕКТ ФОТОГРАФИИ
 ===================================================== */
 
-const board =
+const photoObject =
     new THREE.Group();
 
 
 /*
-    Начальный угол 45 градусов.
-*/
+ * Начальный наклон 45°
+ */
 
-board.rotation.y =
+photoObject.rotation.y =
     THREE.MathUtils.degToRad(45);
 
 
-/*
-    Ставим фотографию примерно
-    в 2 метрах перед пользователем.
-*/
 
-board.position.set(
+/*
+ * Объект находится примерно
+ * на уровне глаз.
+ */
+
+photoObject.position.set(
     0,
     1.4,
-    -2.0
+    -2
 );
 
 
-scene.add(board);
+scene.add(photoObject);
 
-
-/* =====================================================
-   ЗАГРУЗКА ФОТО
-===================================================== */
-
-const textureLoader =
-    new THREE.TextureLoader();
-
-
-const texture =
-    textureLoader.load(
-        "izbushka_card.jpg",
-        () => {
-
-            setupPhoto();
-
-        }
-    );
-
-
-texture.colorSpace =
-    THREE.SRGBColorSpace;
 
 
 /* =====================================================
-   СОЗДАНИЕ ФОТОГРАФИИ
+   СОЗДАЁМ ФОТО ПО ПРОПОРЦИЯМ
 ===================================================== */
 
-function setupPhoto() {
+let photoReady = false;
 
-    /*
-        Получаем настоящие пропорции файла.
-    */
+
+photoTexture.image.onload =
+    () => {
+
+        createPhoto();
+
+    };
+
+
+/*
+ * Иногда картинка успевает загрузиться
+ * раньше обработчика.
+ */
+
+if (photoTexture.image.complete) {
+
+    createPhoto();
+
+}
+
+
+
+/* =====================================================
+   СОЗДАНИЕ
+===================================================== */
+
+function createPhoto() {
+
+    if (photoReady)
+        return;
+
+    photoReady = true;
+
 
     const image =
-        texture.image;
+        photoTexture.image;
 
 
     const aspect =
@@ -989,93 +499,98 @@ function setupPhoto() {
 
 
     /*
-        Высота выставочного экземпляра.
+     * Высота объекта в метрах.
+     */
 
-        Для будущей большой горизонтальной
-        фотографии ширина автоматически
-        станет гораздо больше.
-    */
-
-    const maxHeight = 2.4;
-
-    const maxWidth = 10.0;
+    const height =
+        2.2;
 
 
-    let height =
-        maxHeight;
+    /*
+     * Ширина рассчитывается
+     * автоматически.
 
+     * Поэтому если потом у тебя будет
+     * огромная горизонтальная фотография,
+     * она сама станет широкой.
+     */
 
-    let width =
+    const width =
         height * aspect;
 
 
     /*
-        Если фотография слишком широкая,
-        ограничиваем ширину.
+     * Максимальная ширина,
+     * чтобы объект совсем не
+     * оказался гигантским.
+     */
 
-        При этом пропорции сохраняются.
-    */
-
-    if (width > maxWidth) {
-
-        width = maxWidth;
-
-        height =
-            width / aspect;
-
-    }
+    const finalWidth =
+        Math.min(
+            width,
+            8
+        );
 
 
-    /* ===============================================
+    const finalHeight =
+        finalWidth / aspect;
+
+
+
+    /* =================================================
        ЧЁРНАЯ ОСНОВА
-    =============================================== */
+    ================================================= */
 
     const thickness =
-        0.055;
+        0.04;
 
 
-    const bodyGeometry =
+    const boxGeometry =
         new THREE.BoxGeometry(
-            width,
-            height,
+            finalWidth,
+            finalHeight,
             thickness
         );
 
 
     const blackMaterial =
         new THREE.MeshBasicMaterial({
-            color: 0x050505
+            color: 0x000000
         });
 
 
     const body =
         new THREE.Mesh(
-            bodyGeometry,
+            boxGeometry,
             blackMaterial
         );
 
 
-    board.add(body);
+    photoObject.add(body);
 
 
-    /* ===============================================
-       ПЕРЕДНЯЯ ФОТОГРАФИЯ
-    =============================================== */
+
+    /* =================================================
+       ПЕРЕДНЯЯ СТОРОНА
+    ================================================= */
 
     const frontGeometry =
         new THREE.PlaneGeometry(
-            width,
-            height
+            finalWidth,
+            finalHeight
         );
 
 
     const frontMaterial =
         new THREE.MeshBasicMaterial({
 
-            map: texture,
+            map: photoTexture,
 
-            side:
-                THREE.FrontSide
+            transparent: true,
+
+            opacity: 1,
+
+            side: THREE.FrontSide
 
         });
 
@@ -1087,26 +602,26 @@ function setupPhoto() {
         );
 
 
-    /*
-        Чуть-чуть выдвигаем
-        фотографию вперёд.
-    */
-
     front.position.z =
         thickness / 2 + 0.002;
 
 
-    board.add(front);
+    /*
+     * Именно фотография.
+     */
+
+    photoObject.add(front);
 
 
-    /* ===============================================
-       ЗАДНЯЯ ЧЁРНАЯ СТОРОНА
-    =============================================== */
+
+    /* =================================================
+       ЗАДНЯЯ СТОРОНА
+    ================================================= */
 
     const backGeometry =
         new THREE.PlaneGeometry(
-            width,
-            height
+            finalWidth,
+            finalHeight
         );
 
 
@@ -1115,8 +630,7 @@ function setupPhoto() {
 
             color: 0x000000,
 
-            side:
-                THREE.FrontSide
+            side: THREE.FrontSide
 
         });
 
@@ -1136,214 +650,245 @@ function setupPhoto() {
         -thickness / 2 - 0.002;
 
 
-    board.add(back);
+    photoObject.add(back);
+
 
 
     /*
-        Сохраняем размеры.
-        Они понадобятся для анимации.
-    */
+     * Сохраняем ссылку,
+     * чтобы дальше можно было
+     * управлять прозрачностью.
+     */
 
-    board.userData.width =
-        width;
-
-    board.userData.height =
-        height;
-
+    photoObject.userData.front =
+        front;
 
 }
 
 
+
 /* =====================================================
-   АВТОМАТИЧЕСКОЕ ДВИЖЕНИЕ ФОТО
+   НАСТОЯЩИЙ AR
 ===================================================== */
 
-const clock =
-    new THREE.Clock();
-
-
-function animateObject() {
-
-    const time =
-        clock.getElapsedTime();
-
+async function startAR() {
 
     /*
-        Фотография плавно ездит
-        слева направо и обратно.
-
-        Чем больше значение 2.8,
-        тем дальше она ходит.
-    */
-
-    const movement =
-        Math.sin(time * 0.65) * 2.8;
-
-
-    board.position.x =
-        movement;
-
-}
-
-
-/* =====================================================
-   XR ПОДДЕРЖКА
-===================================================== */
-
-async function checkAR() {
+     * Проверяем поддержку WebXR.
+     */
 
     if (!navigator.xr) {
 
-        return false;
+        showMessage(
+            "AR недоступен",
+            "Этот браузер не предоставляет WebXR. " +
+            "Открой сайт на устройстве с поддержкой AR."
+        );
+
+        return;
 
     }
+
+
+
+    let supported = false;
 
 
     try {
 
-        return await navigator.xr
-            .isSessionSupported(
+        supported =
+            await navigator.xr.isSessionSupported(
                 "immersive-ar"
             );
 
-    } catch {
+    } catch(error) {
 
-        return false;
+        console.error(error);
+
+    }
+
+
+
+    if (!supported) {
+
+        showMessage(
+            "AR недоступен",
+            "Это устройство или браузер не поддерживает " +
+            "настоящий WebXR AR-режим."
+        );
+
+        return;
+
+    }
+
+
+
+    try {
+
+        /*
+         * Запрашиваем настоящую AR-сессию.
+         */
+
+        const session =
+            await navigator.xr.requestSession(
+
+                "immersive-ar",
+
+                {
+                    requiredFeatures: [
+                        "local-floor"
+                    ]
+                }
+
+            );
+
+
+        /*
+         * Передаём сессию Three.js.
+         */
+
+        await renderer.xr.setSession(
+            session
+        );
+
+
+        /*
+         * Показываем AR.
+         */
+
+        canvas.classList.add(
+            "active"
+        );
+
+
+        arUI.classList.add(
+            "active"
+        );
+
+
+        welcomeScreen.classList.add(
+            "hidden"
+        );
+
+
+
+        /*
+         * Когда AR закрывается.
+         */
+
+        session.addEventListener(
+            "end",
+            () => {
+
+                canvas.classList.remove(
+                    "active"
+                );
+
+                arUI.classList.remove(
+                    "active"
+                );
+
+                welcomeScreen.classList.remove(
+                    "hidden"
+                );
+
+                renderer.setAnimationLoop(
+                    null
+                );
+
+            }
+        );
+
+
+
+        /*
+         * Запускаем рендер.
+         */
+
+        renderer.setAnimationLoop(
+            render
+        );
+
+
+    } catch(error) {
+
+        console.error(error);
+
+
+        showMessage(
+            "Не удалось открыть AR",
+            "Браузер не смог запустить AR-режим. " +
+            "Проверь разрешение камеры и попробуй ещё раз."
+        );
 
     }
 
 }
 
 
+
 /* =====================================================
-   ОТКРЫТИЕ AR
+   РЕНДЕР
 ===================================================== */
 
-openAR.addEventListener(
-    "click",
-    async () => {
+function render(
+    time,
+    frame
+) {
 
-        /*
-            Проверяем реальную поддержку.
-        */
-
-        const supported =
-            await checkAR();
-
-
-        if (!supported) {
-
-            showMessage(
-                "AR недоступен",
-                "На этом устройстве или в этом браузере " +
-                "нет поддержки настоящего immersive AR."
-            );
-
-            return;
-
-        }
+    /*
+     * Реальная камера телефона
+     * управляется самим WebXR.
+     */
 
 
-        try {
+    /*
+     * Движение фотографии
+     * влево → вправо → влево.
 
-            /*
-                local-floor важен для того,
-                чтобы объект находился
-                в пространстве, а не просто
-                вращался перед экраном.
-            */
+     * Амплитуда большая, специально
+     * под будущую длинную фотографию.
+     */
 
-            const session =
-                await navigator.xr.requestSession(
-                    "immersive-ar",
-                    {
-                        requiredFeatures: [
-                            "local-floor"
-                        ]
-                    }
-                );
+    const seconds =
+        performance.now() / 1000;
 
 
-            /*
-                Передаём XR-сессию
-                Three.js.
-            */
-
-            await renderer.xr.setSession(
-                session
-            );
+    const movement =
+        Math.sin(
+            seconds * 0.65
+        ) * 2.5;
 
 
-            /*
-                Показываем AR UI.
-            */
-
-            arUI.classList.remove(
-                "hidden"
-            );
+    photoObject.position.x =
+        movement;
 
 
-            /*
-                XR сам управляет
-                камерой реального мира.
-            */
+    /*
+     * Можно добавить совсем небольшое
+     * плавное движение самого объекта.
+     */
 
-            renderer.setAnimationLoop(
-                () => {
-
-                    animateObject();
-
-                    renderer.render(
-                        scene,
-                        camera
-                    );
-
-                }
-            );
+    photoObject.rotation.z =
+        Math.sin(
+            seconds * 0.35
+        ) * 0.015;
 
 
-            /*
-                Когда пользователь выходит
-                из AR.
-            */
+    renderer.render(
+        scene,
+        camera
+    );
 
-            session.addEventListener(
-                "end",
-                () => {
+}
 
-                    arUI.classList.add(
-                        "hidden"
-                    );
-
-                    renderer.setAnimationLoop(
-                        null
-                    );
-
-                }
-            );
-
-
-        } catch(error) {
-
-            console.error(error);
-
-            showMessage(
-                "Не получилось запустить AR",
-                "Браузер не смог запустить AR-сессию. " +
-                "Проверь разрешения и попробуй ещё раз."
-            );
-
-        }
-
-    }
-);
 
 
 /* =====================================================
-   ВЫЙТИ ИЗ AR
+   ЗАКРЫТИЕ
 ===================================================== */
 
-exitAR.addEventListener(
+closeBtn.addEventListener(
     "click",
     async () => {
 
@@ -1351,7 +896,7 @@ exitAR.addEventListener(
             renderer.xr.getSession();
 
 
-        if(session) {
+        if (session) {
 
             await session.end();
 
@@ -1361,8 +906,24 @@ exitAR.addEventListener(
 );
 
 
+
 /* =====================================================
-   ОШИБКА
+   ЗАПУСК
+===================================================== */
+
+openArBtn.addEventListener(
+    "click",
+    () => {
+
+        startAR();
+
+    }
+);
+
+
+
+/* =====================================================
+   СООБЩЕНИЕ
 ===================================================== */
 
 function showMessage(
@@ -1376,23 +937,33 @@ function showMessage(
     messageText.textContent =
         text;
 
+    message.classList.remove(
+        "hidden"
+    );
+
     message.classList.add(
-        "show"
+        "flex"
     );
 
 }
+
 
 
 messageClose.addEventListener(
     "click",
     () => {
 
+        message.classList.add(
+            "hidden"
+        );
+
         message.classList.remove(
-            "show"
+            "flex"
         );
 
     }
 );
+
 
 
 /* =====================================================
@@ -1414,79 +985,6 @@ window.addEventListener(
             window.innerWidth,
             window.innerHeight
         );
-
-    }
-);
-
-
-/* =====================================================
-   ТАЙМЛАЙН
-===================================================== */
-
-const timeline =
-    document.getElementById(
-        "timelineTrack"
-    );
-
-
-let timelineStartX = 0;
-let dragging = false;
-let currentX = 0;
-
-
-timeline.addEventListener(
-    "pointerdown",
-    event => {
-
-        dragging = true;
-
-        timelineStartX =
-            event.clientX -
-            currentX;
-
-        timeline.setPointerCapture(
-            event.pointerId
-        );
-
-    }
-);
-
-
-timeline.addEventListener(
-    "pointermove",
-    event => {
-
-        if(!dragging)
-            return;
-
-
-        currentX =
-            event.clientX -
-            timelineStartX;
-
-
-        timeline.style.transform =
-            `translateX(${currentX}px)`;
-
-    }
-);
-
-
-timeline.addEventListener(
-    "pointerup",
-    () => {
-
-        dragging = false;
-
-    }
-);
-
-
-timeline.addEventListener(
-    "pointercancel",
-    () => {
-
-        dragging = false;
 
     }
 );
