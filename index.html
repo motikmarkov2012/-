@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Таймлайн — Проект Баба Яга</title>
+    <!-- Подключаем библиотеку для работы с 3D и AR в браузере -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #111;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 15px 0;
+        }
+
+        /* Сам контейнер для 3D/AR сцены */
+        model-viewer {
+            width: 100vw;
+            height: 70vh;
+            background-color: #1a1a1a;
+        }
+
+        /* Кнопка запуска AR (камеры) */
+        #ar-button {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+            margin-top: 15px;
+        }
+
+        #ar-button:active {
+            transform: scale(0.95);
+        }
+
+        .info {
+            font-size: 14px;
+            color: #aaa;
+            padding: 0 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Проект «Баба Яга» в AR</h1>
+    
+    <!-- Компонент для отображения 3D-модели / фото с наклоном и поддержкой камеры телефонов -->
+    <!-- (Здесь используется демонстрационная 3D-модель, в будущем заменим на твой объект/фото) -->
+    <span id="ar-view">
+        <model-viewer 
+            id="babayaga-model"
+            src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
+            ios-src="https://modelviewer.dev/shared-assets/models/Astronaut.usdz"
+            alt="Проект Баба Яга"
+            ar
+            ar-modes="scene-viewer quick-look webxr"
+            camera-controls
+            auto-rotate
+            shadow-intensity="1">
+            
+            <!-- Кнопка, которая появляется прямо на экране для перехода в режим камеры -->
+            <button slot="ar-button" id="ar-button">
+                📷 Включить камеру и ходить вокруг
+            </button>
+        </model-viewer>
+    </span>
+
+    <div class="info">
+        Нажми кнопку, наведите камеру на пол, и обойди проект своими ногами!
+    </div>
+
+</body>
+</html>
