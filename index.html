@@ -2,80 +2,473 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Команда Баба Яга — AR Просмотр</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Баба Яга — AR Photo</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Движок WebAR для работы с обычными изображениями без .glb -->
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+    <script
+        type="module"
+        src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js">
+    </script>
+
     <style>
-        body { margin: 0; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        /* Скрываем служебные блоки A-Frame */
-        .a-enter-vr { display: none !important; }
+        body {
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                sans-serif;
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            --poster-color: transparent;
+            background: transparent;
+        }
+
+        #viewer-container {
+            z-index: 20;
+        }
+
+        #status {
+            position: fixed;
+            left: 50%;
+            bottom: 22px;
+            transform: translateX(-50%);
+
+            z-index: 60;
+
+            padding: 10px 15px;
+
+            border: 1px solid rgba(255,255,255,.1);
+
+            background: rgba(24,24,27,.88);
+
+            backdrop-filter: blur(12px);
+
+            color: #a1a1aa;
+
+            font-size: 12px;
+
+            display: none;
+        }
+
+        #status.show {
+            display: block;
+        }
     </style>
 </head>
-<body class="bg-zinc-950 text-zinc-100 select-none">
 
-    <!-- Стартовый экран в твоем стиле -->
-    <div id="start-screen" class="fixed inset-0 z-50 flex flex-col justify-between p-6 bg-zinc-950">
-        <header class="w-full flex justify-between items-center border-b border-zinc-900 pb-4">
-            <h1 class="text-xs tracking-widest uppercase text-zinc-500">Команда Баба Яга</h1>
-            <span class="text-xs text-emerald-500">AR Camera</span>
-        </header>
 
-        <main class="flex-1 flex flex-col items-center justify-center text-center px-4">
-            <h2 class="text-xl font-semibold mb-2">Просмотр фото в AR</h2>
-            <p class="text-sm text-zinc-400 mb-8 max-w-xs">
-                Нажмите кнопку, разрешите доступ к камере и перед вами появится фото в реальном пространстве.
-            </p>
-            
-            <button id="start-ar-btn" class="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium tracking-wide transition-colors shadow-lg shadow-emerald-950/50 rounded-xl cursor-pointer">
-                Запустить камеру (AR)
-            </button>
-        </main>
+<body
+    class="
+        bg-zinc-950
+        text-zinc-100
+        h-screen
+        w-screen
+        overflow-hidden
+        flex
+        flex-col
+        justify-between
+        select-none
+    "
+>
 
-        <footer class="text-center text-xs text-zinc-600">
-            GitHub Pages (HTTPS)
-        </footer>
+
+<!-- ==============================
+     ШАПКА
+================================ -->
+
+<header
+    class="
+        w-full
+        p-6
+        flex
+        justify-between
+        items-center
+        border-b
+        border-zinc-900
+        z-10
+    "
+>
+
+    <h1
+        class="
+            text-xs
+            tracking-widest
+            uppercase
+            text-zinc-500
+        "
+    >
+        Баба Яга
+    </h1>
+
+
+    <span class="text-xs text-blue-500">
+        AR
+    </span>
+
+</header>
+
+
+
+<!-- ==============================
+     ГЛАВНЫЙ ЭКРАН
+================================ -->
+
+<main
+    id="welcome-screen"
+    class="
+        flex-1
+        flex
+        flex-col
+        items-center
+        justify-center
+        px-4
+    "
+>
+
+    <button
+        id="open-ar-btn"
+        disabled
+        class="
+            px-8
+            py-4
+            bg-blue-600
+            hover:bg-blue-500
+            disabled:bg-zinc-800
+            disabled:text-zinc-500
+            text-white
+            text-sm
+            font-medium
+            tracking-wide
+            transition-colors
+            shadow-lg
+            shadow-blue-950/50
+        "
+    >
+        Подготовка…
+    </button>
+
+</main>
+
+
+
+<!-- ==============================
+     AR / 3D VIEWER
+================================ -->
+
+<div
+    id="viewer-container"
+    class="
+        absolute
+        inset-0
+        pt-20
+        pb-6
+        px-4
+        hidden
+        bg-zinc-950
+    "
+>
+
+    <div class="flex-1 w-full h-full relative">
+
+        <model-viewer
+            id="ar-model-viewer"
+
+            src="izbushka_photo_ar.glb"
+
+            ar
+
+            ar-modes="
+                scene-viewer
+                quick-look
+                webxr
+            "
+
+            ar-scale="fixed"
+
+            camera-controls
+
+            touch-action="pan-y"
+
+            interaction-prompt="none"
+
+            autoplay
+
+            shadow-intensity="0.8"
+
+            exposure="1"
+
+            class="w-full h-full cursor-pointer"
+        >
+        </model-viewer>
+
     </div>
 
-    <!-- AR Сцена (открывается при нажатии) -->
-    <a-scene 
-        id="ar-scene"
-        embedded 
-        arjs="sourceType: webcam; debugUIEnabled: false;"
-        vr-mode-ui="enabled: false"
-        class="hidden">
-        
-        <a-assets>
-            <img id="izbushka-img" src="izbushka_card.jpg">
-        </a-assets>
 
-        <!-- 
-            Плоскость с вашей картинкой izbushka_card.jpg 
-            position="0 1.2 -2" выставляет фото прямо перед вами в 2 метрах
-        -->
-        <a-image 
-            src="#izbushka-img" 
-            position="0 1.2 -2" 
-            width="2.2" 
-            height="1.4"
-            rotation="0 0 0">
-        </a-image>
+    <div
+        class="
+            absolute
+            bottom-5
+            left-1/2
+            -translate-x-1/2
+            z-20
 
-        <a-entity camera></a-entity>
-    </a-scene>
+            bg-zinc-900/80
 
-    <script>
-        const startBtn = document.getElementById('start-ar-btn');
-        const startScreen = document.getElementById('start-screen');
-        const arScene = document.getElementById('ar-scene');
+            border
+            border-zinc-800
 
-        startBtn.addEventListener('click', () => {
-            // Скрываем начальный экран и запускаем камеру
-            startScreen.classList.add('hidden');
-            arScene.classList.remove('hidden');
-        });
-    </script>
+            px-5
+            py-3
+
+            backdrop-blur-md
+
+            text-xs
+            text-zinc-400
+
+            shadow-xl
+
+            whitespace-nowrap
+        "
+    >
+        В AR можно ходить вокруг фотографии
+    </div>
+
+</div>
+
+
+
+<!-- ==============================
+     СТАТУС
+================================ -->
+
+<div id="status"></div>
+
+
+
+<script>
+
+const openArBtn =
+    document.getElementById(
+        'open-ar-btn'
+    );
+
+
+const welcomeScreen =
+    document.getElementById(
+        'welcome-screen'
+    );
+
+
+const viewerContainer =
+    document.getElementById(
+        'viewer-container'
+    );
+
+
+const modelViewer =
+    document.getElementById(
+        'ar-model-viewer'
+    );
+
+
+const status =
+    document.getElementById(
+        'status'
+    );
+
+
+let modelLoaded = false;
+
+
+
+/* ==============================
+   СТАТУС
+================================ */
+
+function setStatus(text) {
+
+    status.textContent = text;
+
+    status.classList.add('show');
+
+    clearTimeout(setStatus.timer);
+
+    setStatus.timer =
+        setTimeout(() => {
+
+            status.classList.remove('show');
+
+        }, 4000);
+
+}
+
+
+
+/* ==============================
+   ОБЫЧНЫЙ ПРОСМОТР
+================================ */
+
+function showViewer() {
+
+    welcomeScreen.classList.add(
+        'hidden'
+    );
+
+    viewerContainer.classList.remove(
+        'hidden'
+    );
+
+}
+
+
+
+/* ==============================
+   ЗАГРУЗКА GLB
+================================ */
+
+modelViewer.addEventListener(
+    'load',
+    () => {
+
+        modelLoaded = true;
+
+        openArBtn.disabled = false;
+
+        openArBtn.textContent =
+            'Запустить камеру';
+
+    },
+    {
+        once: true
+    }
+);
+
+
+
+/* ==============================
+   ОШИБКА ЗАГРУЗКИ
+================================ */
+
+modelViewer.addEventListener(
+    'error',
+    () => {
+
+        openArBtn.disabled = true;
+
+        openArBtn.textContent =
+            'Ошибка загрузки';
+
+        setStatus(
+            'Не удалось загрузить izbushka_photo_ar.glb'
+        );
+
+    }
+);
+
+
+
+/* ==============================
+   ЗАПУСК AR
+================================ */
+
+openArBtn.addEventListener(
+    'click',
+    async () => {
+
+        if (!modelLoaded) {
+            return;
+        }
+
+
+        try {
+
+            await modelViewer.activateAR();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showViewer();
+
+            setStatus(
+                'AR недоступен — открыт 3D-просмотр'
+            );
+
+        }
+
+    }
+);
+
+
+
+/* ==============================
+   СТАТУС AR
+================================ */
+
+modelViewer.addEventListener(
+    'ar-status',
+    (event) => {
+
+        const s =
+            event.detail?.status || '';
+
+
+        if (
+            s === 'session-started'
+        ) {
+
+            viewerContainer.classList.remove(
+                'hidden'
+            );
+
+            welcomeScreen.classList.add(
+                'hidden'
+            );
+
+        }
+
+
+        if (
+            s === 'failed'
+        ) {
+
+            setStatus(
+                'Не удалось запустить AR. ' +
+                'Проверь разрешение камеры.'
+            );
+
+        }
+
+    }
+);
+
+
+
+/* ==============================
+   AR TRACKING
+================================ */
+
+modelViewer.addEventListener(
+    'ar-tracking',
+    (event) => {
+
+        console.log(
+            'AR tracking:',
+            event.detail
+        );
+
+    }
+);
+
+</script>
+
 </body>
 </html>
