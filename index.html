@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Проект: Избушка Бабы Яги</title>
-    <!-- Подключаем скрипт для поддержки AR в браузере -->
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <title>Проект: Избушка Бабы Яги 2.0 </title>
     <style>
         :root {
             --primary-green: #2e7d32;
@@ -71,7 +69,7 @@
             margin-bottom: 15px;
         }
 
-        .ar-container {
+        .photo-container {
             background: var(--white);
             border-radius: 12px;
             padding: 20px;
@@ -79,16 +77,16 @@
             box-shadow: 0 4px 15px rgba(46, 125, 50, 0.05);
         }
 
-        /* Контейнер для 3D/AR просмотра */
-        model-viewer {
+        .photo-preview {
             width: 100%;
-            height: 350px;
-            background-color: var(--light-green);
+            max-height: 500px;
+            object-fit: contain;
             border-radius: 8px;
+            background-color: var(--light-green);
             margin-bottom: 20px;
+            cursor: pointer;
         }
 
-        /* Кнопка запуска AR */
         .ar-button {
             background-color: var(--primary-green);
             color: var(--white);
@@ -101,6 +99,8 @@
             transition: background-color 0.2s, transform 0.1s;
             width: 100%;
             max-width: 350px;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .ar-button:hover {
@@ -120,57 +120,88 @@
             border-top: 1px solid var(--light-green);
         }
 
-        @media (min-width: 600px) {
-            .ar-button {
-                width: auto;
-            }
+        /* Модальное окно для просмотра фото на весь экран */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+        }
+
+        .modal.active {
+            display: flex;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Проект интерактивной модели</h1>
+        <h1>Проект: Избушка Бабы Яги</h1>
     </header>
 
     <main>
         <section class="info-section">
             <h2>О проекте</h2>
             <p>
-                Данный проект представляет собой интерактивную конструкцию избушки на курьих ножках. 
-                Здесь реализована возможность детального изучения каждого этапа сборки, конструкции и эволюции идеи.
+                Данный проект представляет собой детальную конструкцию избушки на курьих ножках. 
+                Здесь собраны ключевые этапы сборки, инженерные решения и эволюция создания объекта.
             </p>
             <p>
-                Используйте режим дополненной реальности, чтобы разместить объект в реальном пространстве, 
-                обойти его со всех сторон и ознакомиться с полной историей создания.
+                Нажмите на кнопку ниже или на само изображение, чтобы открыть полную историю развития проекта в высоком разрешении.
             </p>
         </section>
 
-        <section class="ar-container">
-            <!-- 
-              Сюда вместо модели model.glb ты в дальнейшем подключишь свою 3D-модель 
-              или подготовленный файл с длинной историей проекта.
-            -->
-            <model-viewer 
-                src="model.glb" 
-                ios-src="model.usdz" 
-                ar 
-                ar-modes="webxr scene-viewer quick-look" 
-                camera-controls 
-                auto-rotate
-                alt="История развития проекта">
-            </model-viewer>
+        <section class="photo-container">
+            <!-- Твоя фотография (замени имя файла, если потребуется) -->
+            <img src="izbushka_card.jpg" alt="История развития проекта" class="photo-preview" id="projectPhoto">
+            
+            <br>
 
             <!-- Кнопка с точным названием -->
-            <button class="ar-button" slot="ar-button">
+            <button class="ar-button" id="openModalBtn">
                 История развития проекта
             </button>
         </section>
     </main>
 
+    <!-- Полноэкранный просмотр фото -->
+    <div class="modal" id="photoModal">
+        <img src="izbushka_card.jpg" alt="История развития проекта в деталях">
+    </div>
+
     <footer>
         <p>GitHub Pages Deployment</p>
     </footer>
+
+    <script>
+        const modal = document.getElementById('photoModal');
+        const photo = document.getElementById('projectPhoto');
+        const btn = document.getElementById('openModalBtn');
+
+        function showModal() {
+            modal.classList.add('active');
+        }
+
+        function hideModal() {
+            modal.classList.remove('active');
+        }
+
+        photo.addEventListener('click', showModal);
+        btn.addEventListener('click', showModal);
+        modal.addEventListener('click', hideModal);
+    </script>
 
 </body>
 </html>
