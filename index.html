@@ -1,334 +1,176 @@
 <!DOCTYPE html>
-<html lang="ru" class="dark">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Проект «Баба Яга» — Интерактивный Таймлайн</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        cyber: {
-                            dark: '#0a0b10',
-                            card: '#121420',
-                            accent: '#ff3366',
-                            glow: '#ff336655',
-                            cyan: '#00f2fe'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>Проект: Избушка Бабы Яги</title>
+    <!-- Подключаем скрипт для поддержки AR в браузере -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
+        :root {
+            --primary-green: #2e7d32;
+            --dark-green: #1b5e20;
+            --light-green: #e8f5e9;
+            --bg-color: #f4f9f4;
+            --text-main: #2c3e50;
+            --text-muted: #555555;
+            --white: #ffffff;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a0b10;
-            color: #f3f4f6;
-            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* 3D Tilt Card Scene */
-        .scene-container {
-            perspective: 1200px;
-            transform-style: preserve-3d;
+        header {
+            background-color: var(--white);
+            border-bottom: 2px solid var(--light-green);
+            padding: 20px;
+            text-align: center;
         }
 
-        .tilt-card {
-            transform-style: preserve-3d;
-            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
-            will-change: transform;
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--dark-green);
         }
 
-        .card-content {
-            transform: translateZ(40px);
+        main {
+            flex: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            box-sizing: border-box;
+            width: 100%;
         }
 
-        .card-glow {
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(135deg, #ff3366, #00f2fe);
-            border-radius: 1.25rem;
-            z-index: -1;
-            filter: blur(15px);
-            opacity: 0.4;
-            transition: opacity 0.3s ease;
+        .info-section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.05);
+            margin-bottom: 30px;
+            border-left: 5px solid var(--primary-green);
         }
 
-        .tilt-card:hover .card-glow {
-            opacity: 0.7;
+        .info-section h2 {
+            margin-top: 0;
+            color: var(--dark-green);
+            font-size: 1.4rem;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .info-section p {
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 15px;
         }
-        ::-webkit-scrollbar-track {
-            background: #0a0b10;
+
+        .ar-container {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.05);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #27272a;
-            border-radius: 4px;
+
+        /* Контейнер для 3D/AR просмотра */
+        model-viewer {
+            width: 100%;
+            height: 350px;
+            background-color: var(--light-green);
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #ff3366;
+
+        /* Кнопка запуска AR */
+        .ar-button {
+            background-color: var(--primary-green);
+            color: var(--white);
+            border: none;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .ar-button:hover {
+            background-color: var(--dark-green);
+        }
+
+        .ar-button:active {
+            transform: scale(0.98);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            background-color: var(--white);
+            border-top: 1px solid var(--light-green);
+        }
+
+        @media (min-width: 600px) {
+            .ar-button {
+                width: auto;
+            }
         }
     </style>
 </head>
-<body class="bg-cyber-dark min-h-screen flex flex-col justify-between selection:bg-cyber-accent selection:text-white">
+<body>
 
-    <header class="w-full border-b border-white/10 bg-cyber-card/80 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyber-accent to-cyber-cyan flex items-center justify-center shadow-lg shadow-cyber-accent/30 text-white font-bold text-lg">
-                    BY
-                </div>
-                <div>
-                    <h1 class="font-bold text-lg tracking-tight text-white flex items-center gap-2">
-                        Проект «Баба Яга» 
-                        <span class="text-xs px-2 py-0.5 rounded-full bg-cyber-accent/20 text-cyber-accent border border-cyber-accent/30 font-medium">v2.0</span>
-                    </h1>
-                    <p class="text-xs text-gray-400">Интерактивный таймлайн робототехнического проекта</p>
-                </div>
-            </div>
-            <div class="flex items-center gap-3">
-                <a href="https://github.com" target="_blank" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium transition text-gray-300 hover:text-white">
-                    <i class="fa-brands fa-github text-base"></i> GitHub Repo
-                </a>
-                <div class="text-xs text-gray-400 text-right">
-                    Автор: <span class="text-white font-semibold">Матвей</span>
-                </div>
-            </div>
-        </div>
+    <header>
+        <h1>Проект интерактивной модели</h1>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-8 md:py-12 flex-grow grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full">
-        
-        <!-- Left Column: 3D Tilt Card Display -->
-        <div class="lg:col-span-6 flex flex-col items-center justify-center scene-container w-full">
-            <div class="relative w-full max-w-md aspect-[3/4] cursor-grab active:cursor-grabbing group">
-                <div class="card-glow"></div>
-                <div id="tiltCard" class="tilt-card w-full h-full bg-cyber-card border border-white/15 rounded-2xl shadow-2xl overflow-hidden flex flex-col justify-between p-4 relative">
-                    
-                    <!-- Image container -->
-                    <div class="w-full h-[75%] rounded-xl overflow-hidden relative bg-black/40 border border-white/5">
-                        <img id="stepImage" src="izbushka_card.jpg" alt="Баба Яга проект" class="w-full h-full object-cover card-content transition-all duration-500" onerror="this.src='https://placehold.co/600x800/1e1e2f/ff3366?text=Baba+Yaga+Project'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-cyber-card via-transparent to-transparent opacity-60"></div>
-                        
-                        <!-- Badge overlay -->
-                        <div class="absolute top-3 left-3 px-3 py-1 rounded-lg bg-black/60 backdrop-blur-md border border-white/10 text-xs font-semibold text-cyber-cyan flex items-center gap-1.5 shadow-lg">
-                            <i id="stepIcon" class="fa-solid fa-lightbulb"></i>
-                            <span id="stepBadge">Этап 1</span>
-                        </div>
-                    </div>
-
-                    <!-- Card Info footer -->
-                    <div class="card-content pt-3 px-1">
-                        <h3 id="cardTitle" class="text-lg font-bold text-white tracking-wide">Зарождение концепта</h3>
-                        <p id="cardSubtitle" class="text-xs text-gray-400 mt-1 line-clamp-2">Первые идеи, эскизы и планирование конструкции избушки.</p>
-                    </div>
-                </div>
-            </div>
-            <p class="text-xs text-gray-500 mt-4 flex items-center gap-1.5">
-                <i class="fa-solid fa-hand-pointer text-cyber-accent"></i> Наводите мышь или водите пальцем для 3D-наклона
+    <main>
+        <section class="info-section">
+            <h2>О проекте</h2>
+            <p>
+                Данный проект представляет собой интерактивную конструкцию избушки на курьих ножках. 
+                Здесь реализована возможность детального изучения каждого этапа сборки, конструкции и эволюции идеи.
             </p>
-        </div>
+            <p>
+                Используйте режим дополненной реальности, чтобы разместить объект в реальном пространстве, 
+                обойти его со всех сторон и ознакомиться с полной историей создания.
+            </p>
+        </section>
 
-        <!-- Right Column: Interactive Timeline Navigation & Details -->
-        <div class="lg:col-span-6 flex flex-col justify-center space-y-6 w-full">
-            <div>
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-accent/10 border border-cyber-accent/20 text-cyber-accent text-xs font-semibold mb-3">
-                    <i class="fa-solid fa-timeline"></i> ИСТОРИЯ РАЗВИТИЯ ПРОЕКТА
-                </div>
-                <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">Шаг за шагом к результату</h2>
-                <p class="text-sm text-gray-400 mt-1">Нажимайте на этапы таймлайна ниже, чтобы исследовать детали разработки, чертежи и финальную сборку.</p>
-            </div>
+        <section class="ar-container">
+            <!-- 
+              Сюда вместо модели model.glb ты в дальнейшем подключишь свою 3D-модель 
+              или подготовленный файл с длинной историей проекта.
+            -->
+            <model-viewer 
+                src="model.glb" 
+                ios-src="model.usdz" 
+                ar 
+                ar-modes="webxr scene-viewer quick-look" 
+                camera-controls 
+                auto-rotate
+                alt="История развития проекта">
+            </model-viewer>
 
-            <!-- Timeline Steps Buttons -->
-            <div id="timelineSteps" class="space-y-3">
-                <!-- Dynamically populated via JS or pre-rendered -->
-            </div>
-
-            <!-- Detailed Specs Card -->
-            <div class="bg-cyber-card/60 backdrop-blur-md border border-white/10 rounded-2xl p-5 shadow-xl relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-cyber-cyan/5 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
-                <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-2">
-                    <i class="fa-solid fa-microchip text-cyber-cyan"></i> Технические примечания
-                </h4>
-                <p id="stepDetails" class="text-sm text-gray-300 leading-relaxed">
-                    Начните с выбора этапа выше, чтобы узнать подробности реализации ключевых узлов.
-                </p>
-            </div>
-        </div>
-
+            <!-- Кнопка с точным названием -->
+            <button class="ar-button" slot="ar-button">
+                История развития проекта
+            </button>
+        </section>
     </main>
 
-    <footer class="w-full border-t border-white/10 bg-cyber-card/40 py-6 mt-12">
-        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-500">
-            <p>© 2026 Проект «Баба Яга». Все права защищены.</p>
-            <div class="flex items-center gap-4">
-                <span>GitHub Pages Ready</span>
-                <span>•</span>
-                <span>Responsive & Mobile Friendly</span>
-            </div>
-        </div>
+    <footer>
+        <p>GitHub Pages Deployment</p>
     </footer>
 
-    <script>
-        // Project Steps Data
-        const stepsData = [
-            {
-                id: 1,
-                title: "Зарождение концепта",
-                badge: "Этап 1: Идея",
-                subtitle: "Первые наброски, концепция и общая компоновка механики избушки.",
-                details: "На этом этапе была сформирована главная идея проекта: создание интерактивной избушки на курьих ножках с динамическими элементами и подсветкой. Сделаны базовые зарисовки размеров и пропорций.",
-                image: "izbushka_card.jpg",
-                icon: "fa-lightbulb"
-            },
-            {
-                id: 2,
-                title: "Проектирование и каркас",
-                badge: "Этап 2: Конструкция",
-                subtitle: "Сборка механической базы, ножек и рамной основы.",
-                details: "Разработка устойчивого основания на ножках с использованием прочных опорных элементов. Подготовка корпуса избушки, вырезка оконных проемов и монтаж декоративных элементов фасада.",
-                image: "izbushka_card.jpg",
-                icon: "fa-hammer"
-            },
-            {
-                id: 3,
-                title: "Электроника и декор",
-                badge: "Этап 3: Оснащение",
-                subtitle: "Интеграция подсветки, штор, узоров и шнуров питания.",
-                details: "Установка светодиодной ленты по периметру оконного проема, оформление крыши резными узорами и лунными символами, крепление кружевных занавесок для аутентичного сказочного вида.",
-                image: "izbushka_card.jpg",
-                icon: "fa-bolt"
-            },
-            {
-                id: 4,
-                title: "Финальный результат",
-                badge: "Этап 4: Релиз",
-                subtitle: "Готовый проект во всей красе в выставочном зале.",
-                details: "Финальная сборка всех компонентов робототехнического макета. Избушка полностью готова к презентации классным руководителям и демонстрации на выставке проектов!",
-                image: "izbushka_card.jpg",
-                icon: "fa-flag-checkered"
-            }
-        ];
-
-        let currentStepId = 1;
-
-        // Render Timeline Step Buttons
-        const timelineContainer = document.getElementById('timelineSteps');
-
-        function renderSteps() {
-            timelineContainer.innerHTML = '';
-            stepsData.forEach(step => {
-                const isActive = step.id === currentStepId;
-                const btn = document.createElement('button');
-                btn.className = `w-full text-left p-4 rounded-xl border transition-all duration-300 flex items-center justify-between group ${
-                    isActive 
-                        ? 'bg-gradient-to-r from-cyber-accent/20 to-cyber-card border-cyber-accent shadow-lg shadow-cyber-accent/10' 
-                        : 'bg-cyber-card/40 border-white/10 hover:bg-white/5 hover:border-white/20'
-                }`;
-                
-                btn.innerHTML = `
-                    <div class="flex items-center gap-3.5">
-                        <div class="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold transition-colors ${
-                            isActive ? 'bg-cyber-accent text-white' : 'bg-white/5 text-gray-400 group-hover:text-white'
-                        }">
-                            0${step.id}
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-semibold text-white group-hover:text-cyber-cyan transition-colors">${step.title}</h4>
-                            <p class="text-xs text-gray-400 line-clamp-1 mt-0.5">${step.subtitle}</p>
-                        </div>
-                    </div>
-                    <div class="text-xs text-gray-500 group-hover:text-white transition-colors">
-                        <i class="fa-solid fa-chevron-right ${isActive ? 'text-cyber-accent' : ''}"></i>
-                    </div>
-                `;
-
-                btn.onclick = () => selectStep(step.id);
-                timelineContainer.appendChild(btn);
-            });
-        }
-
-        // Switch Step Function
-        function selectStep(id) {
-            currentStepId = id;
-            const step = stepsData.find(s => s.id === id);
-            
-            // Update UI elements with smooth fade
-            const img = document.getElementById('stepImage');
-            img.style.opacity = '0.3';
-            
-            setTimeout(() => {
-                img.src = step.image;
-                document.getElementById('stepBadge').textContent = step.badge;
-                document.getElementById('stepIcon').className = `fa-solid ${step.icon}`;
-                document.getElementById('cardTitle').textContent = step.title;
-                document.getElementById('cardSubtitle').textContent = step.subtitle;
-                document.getElementById('stepDetails').textContent = step.details;
-                img.style.opacity = '1';
-            }, 150);
-
-            renderSteps();
-        }
-
-        // 3D Tilt Card Interaction logic
-        const card = document.getElementById('tiltCard');
-        const scene = document.querySelector('.scene-container');
-
-        scene.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            
-            const rotateX = (-y / 15).toFixed(2);
-            const rotateY = (x / 15).toFixed(2);
-
-            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-        });
-
-        scene.addEventListener('mouseleave', () => {
-            card.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-            card.style.transition = 'transform 0.5s ease-out';
-        });
-
-        scene.addEventListener('mouseenter', () => {
-            card.style.transition = 'transform 0.1s ease-out';
-        });
-
-        // Touch support for mobile devices
-        scene.addEventListener('touchmove', (e) => {
-            if(!e.touches[0]) return;
-            const rect = card.getBoundingClientRect();
-            const touch = e.touches[0];
-            const x = touch.clientX - rect.left - rect.width / 2;
-            const y = touch.clientY - rect.top - rect.height / 2;
-            
-            const rotateX = (-y / 20).toFixed(2);
-            const rotateY = (x / 20).toFixed(2);
-
-            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        }, {passive: true});
-
-        scene.addEventListener('touchend', () => {
-            card.style.transform = 'rotateX(0deg) rotateY(0deg)';
-            card.style.transition = 'transform 0.5s ease-out';
-        });
-
-        // Initial render
-        renderSteps();
-    </script>
 </body>
 </html>
