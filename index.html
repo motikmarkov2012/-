@@ -10,8 +10,8 @@
             --dark-green: #1b5e20;
             --light-green: #e8f5e9;
             /* Ультра жидкое стекло */
-            --glass-bg: rgba(255, 255, 255, 0.5);
-            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.85);
             --glass-shadow: 0 12px 40px 0 rgba(46, 125, 50, 0.18);
             --text-main: #0f172a;
             --text-muted: #334155;
@@ -36,7 +36,6 @@
             padding: 40px 20px 10px 20px;
             width: 100%;
             box-sizing: border-box;
-            z-index: 10;
         }
 
         header h1 {
@@ -63,7 +62,6 @@
             display: flex;
             flex-direction: column;
             gap: 30px;
-            z-index: 10;
         }
 
         /* Эффект супер жидкого стекла */
@@ -113,7 +111,6 @@
         .timeline-track {
             display: flex;
             width: max-content;
-            /* Плавное движение при прокрутке страницы */
             animation: scrollTimeline linear;
             animation-timeline: scroll();
         }
@@ -137,7 +134,7 @@
             }
         }
 
-        /* Кнопка «Открыть камеру» */
+        /* Кнопка */
         .camera-button {
             background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
             color: #ffffff;
@@ -163,86 +160,67 @@
             transform: translateY(1px);
         }
 
-        /* Модальное окно с реальной камерой устройства */
-        .camera-modal {
+        /* Модальное окно с вращающейся 3D-карточкой под углом 45 градусов */
+        .modal-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 1000;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            perspective: 1200px;
         }
 
-        .camera-modal.active {
+        .modal-overlay.active {
             display: flex;
         }
 
-        /* Видео с камеры */
-        #webcam {
+        .rotating-3d-card {
+            width: 85%;
+            max-width: 450px;
+            transform-style: preserve-3d;
+            animation: slowRotate 10s infinite linear;
+            margin-bottom: 40px;
+        }
+
+        .rotating-3d-card img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-
-        /* Элементы поверх камеры в стиле жидкого стекла */
-        .camera-ui-overlay {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            height: 90%;
-            width: 90%;
-            max-width: 600px;
-            pointer-events: none;
-        }
-
-        .ar-floating-card {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 20px;
-            padding: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            /* Наклон 45 градусов в пространстве */
-            transform: perspective(1000px) rotateX(25deg) rotateY(-20deg);
-            max-width: 80%;
-            pointer-events: auto;
-        }
-
-        .ar-floating-card img {
-            width: 100%;
-            border-radius: 10px;
+            border-radius: 16px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+            /* Твой любимый наклон 45 градусов */
+            transform: rotateX(25deg) rotateY(-25deg);
+            border: 2px solid rgba(255, 255, 255, 0.4);
             display: block;
         }
 
-        .close-camera-btn {
-            background: rgba(255, 255, 255, 0.3);
+        @keyframes slowRotate {
+            0% { transform: rotateY(0deg) rotateX(15deg); }
+            50% { transform: rotateY(180deg) rotateX(-15deg); }
+            100% { transform: rotateY(360deg) rotateX(15deg); }
+        }
+
+        .close-modal-btn {
+            background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(10px);
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            padding: 12px 28px;
-            font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 14px 32px;
+            font-size: 1.1rem;
             font-weight: 600;
             border-radius: 14px;
             cursor: pointer;
-            pointer-events: auto;
             transition: background 0.2s;
         }
 
-        .close-camera-btn:hover {
-            background: rgba(255, 255, 255, 0.5);
+        .close-modal-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
         }
 
         footer {
@@ -251,7 +229,6 @@
             font-size: 0.9rem;
             color: var(--text-muted);
             font-weight: 500;
-            z-index: 10;
         }
     </style>
 </head>
@@ -266,14 +243,14 @@
         <section class="glass-card info-section">
             <h2>О проекте</h2>
             <p>
-                Добро пожаловать в цифровую лабораторию нашей команды. Прокручивайте страницу вниз, 
-                чтобы плавно изучить таймлайн проекта в виде непрерывной ленты. Нажмите кнопку «Открыть камеру», 
-                чтобы запустить режим дополненной реальности прямо в браузере.
+                Добро пожаловать на презентацию нашего проекта. Прокручивайте страницу вниз, 
+                чтобы исследовать таймлайн в виде непрерывной ленты, или нажмите кнопку ниже, 
+                чтобы открыть интерактивный 3D-просмотр фотографии под углом 45 градусов.
             </p>
         </section>
 
         <section class="glass-card content-container">
-            <!-- Бесконечная лента таймлайна -->
+            <!-- Бесконечная лента таймлайна при скролле -->
             <div class="timeline-scroll-container">
                 <div class="timeline-track">
                     <img src="izbushka_card.jpg" alt="Этап проекта">
@@ -282,28 +259,19 @@
                 </div>
             </div>
 
-            <!-- Кнопка запуска реальной камеры -->
-            <button class="camera-button" id="openCameraBtn">
-                Открыть камеру
+            <!-- Кнопка -->
+            <button class="camera-button" id="openModalBtn">
+                Открыть режим просмотра
             </button>
         </section>
     </main>
 
-    <!-- Модальное окно камеры -->
-    <div class="camera-modal" id="cameraModal">
-        <video id="webcam" autoplay playsinline></video>
-        <div class="camera-ui-overlay">
-            <div style="color: white; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.8); background: rgba(0,0,0,0.4); padding: 8px 16px; border-radius: 12px; backdrop-filter: blur(5px);">
-                Режим дополненной реальности (AR)
-            </div>
-            
-            <!-- Плавающая карточка с наклоном 45 градусов -->
-            <div class="ar-floating-card">
-                <img src="izbushka_card.jpg" alt="Таймлайн в AR">
-            </div>
-
-            <button class="close-camera-btn" id="closeCameraBtn">Закрыть камеру</button>
+    <!-- Интерактивное модальное окно с вращением под 45 градусов -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="rotating-3d-card">
+            <img src="izbushka_card.jpg" alt="Проект в 3D">
         </div>
+        <button class="close-modal-btn" id="closeModalBtn">Закрыть</button>
     </div>
 
     <footer>
@@ -311,31 +279,21 @@
     </footer>
 
     <script>
-        const openBtn = document.getElementById('openCameraBtn');
-        const closeBtn = document.getElementById('closeCameraBtn');
-        const modal = document.getElementById('cameraModal');
-        const video = document.getElementById('webcam');
-        let streamActive = null;
+        const openBtn = document.getElementById('openModalBtn');
+        const closeBtn = document.getElementById('closeModalBtn');
+        const overlay = document.getElementById('modalOverlay');
 
-        openBtn.addEventListener('click', async () => {
-            modal.classList.add('active');
-            try {
-                streamActive = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'environment' }, 
-                    audio: false 
-                });
-                video.srcObject = streamActive;
-            } catch (err) {
-                alert('Не удалось получить доступ к камере. Убедитесь, что разрешили доступ в настройках браузера.');
-            }
+        openBtn.addEventListener('click', () => {
+            overlay.classList.add('active');
         });
 
         closeBtn.addEventListener('click', () => {
-            modal.classList.remove('active');
-            if (streamActive) {
-                streamActive.getTracks().exec = track => track.stop();
-                streamActive.getTracks().forEach(track => track.stop());
-                video.srcObject = null;
+            overlay.classList.remove('active');
+        });
+
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                overlay.classList.remove('active');
             }
         });
     </script>
