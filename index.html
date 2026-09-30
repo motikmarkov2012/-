@@ -1,229 +1,834 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Команда Баба Яга - История развития проекта</title>
-    <!-- Официальный движок Google Model-Viewer для запуска нативного AR на iOS и Android -->
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-    <style>
-        :root {
-            --primary-green: #2e7d32;
-            --dark-green: #1b5e20;
-            --light-green: #e8f5e9;
-            /* Ультра жидкое стекло */
-            --glass-bg: rgba(255, 255, 255, 0.55);
-            --glass-border: rgba(255, 255, 255, 0.85);
-            --glass-shadow: 0 12px 40px 0 rgba(46, 125, 50, 0.18);
-            --text-main: #0f172a;
-            --text-muted: #334155;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #c8e6c9 0%, #a3d9c9 50%, #e8f5e9 100%);
-            background-attachment: fixed;
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-        }
+<title>Команда Баба Яга</title>
 
-        header {
-            text-align: center;
-            padding: 40px 20px 10px 20px;
-            width: 100%;
-            box-sizing: border-box;
-        }
+<style>
 
-        header h1 {
-            margin: 0 0 6px 0;
-            font-size: 2.5rem;
-            color: var(--dark-green);
-            letter-spacing: -0.5px;
-            font-weight: 800;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        header p {
-            margin: 0;
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
+html {
+    scroll-behavior: smooth;
+}
 
-        main {
-            width: 100%;
-            max-width: 950px;
-            padding: 20px;
-            box-sizing: border-box;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
+body {
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+    background:
+        radial-gradient(circle at 50% 0%, #173d25 0%, #07100a 45%, #030604 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
 
-        /* Эффект супер жидкого стекла */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: var(--glass-shadow);
-        }
 
-        .info-section h2 {
-            margin-top: 0;
-            color: var(--dark-green);
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-        }
+/* =========================
+   ЖИДКОЕ СТЕКЛО
+========================= */
 
-        .info-section p {
-            line-height: 1.6;
-            color: var(--text-muted);
-            margin: 0;
-            font-size: 1.05rem;
-        }
+.glass {
+    background: rgba(25, 65, 35, 0.28);
 
-        .content-container {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    border: 1px solid rgba(120, 255, 150, 0.16);
 
-        /* Таймлайн: плавная лента при прокрутке страницы */
-        .timeline-scroll-container {
-            width: 100%;
-            overflow: hidden;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.4);
-            border: 1px solid var(--glass-border);
-            margin-bottom: 30px;
-            padding: 20px 0;
-            box-sizing: border-box;
-        }
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
 
-        .timeline-track {
-            display: flex;
-            width: max-content;
-            animation: scrollTimeline linear;
-            animation-timeline: scroll();
-        }
+    box-shadow:
+        0 20px 70px rgba(0, 0, 0, 0.45),
+        inset 0 1px 1px rgba(255,255,255,0.08);
+}
 
-        .timeline-track img {
-            height: 300px;
-            width: auto;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-            margin-right: 30px;
-            display: block;
-            object-fit: contain;
-        }
 
-        @keyframes scrollTimeline {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
+/* =========================
+   ГЛАВНЫЙ ЭКРАН
+========================= */
 
-        /* Настройка компонента AR */
-        model-viewer {
-            width: 100%;
-            height: 100px;
-            background-color: transparent;
-            --poster-color: transparent;
-        }
+.hero {
+    min-height: 100vh;
 
-        /* Кнопка запуска реальной камеры (AR) с подсветкой */
-        .camera-button {
-            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            padding: 18px 36px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.4);
-            width: 100%;
-            max-width: 400px;
-        }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        .camera-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(27, 94, 32, 0.6);
-            background: linear-gradient(135deg, #388e3c 0%, #2e7d32 100%);
-        }
+    padding: 25px;
+}
 
-        .camera-button:active {
-            transform: translateY(1px);
-        }
+.hero-card {
+    width: min(1100px, 100%);
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-    </style>
+    padding: 100px 30px;
+
+    text-align: center;
+
+    border-radius: 35px;
+}
+
+.hero h1 {
+    font-size: clamp(55px, 10vw, 120px);
+
+    line-height: 0.9;
+
+    letter-spacing: -6px;
+
+    font-weight: 700;
+}
+
+.hero h1 span {
+    color: #64ff87;
+}
+
+.hero-subtitle {
+    margin-top: 30px;
+
+    color: rgba(255,255,255,0.55);
+
+    font-size: 17px;
+}
+
+
+/* =========================
+   КНОПКА
+========================= */
+
+.button {
+    display: inline-block;
+
+    margin-top: 45px;
+
+    padding: 17px 30px;
+
+    border-radius: 50px;
+
+    color: white;
+
+    text-decoration: none;
+
+    background: rgba(75, 255, 110, 0.12);
+
+    border: 1px solid rgba(100,255,130,0.35);
+
+    box-shadow:
+        0 0 30px rgba(50,255,90,0.08);
+
+    transition: 0.3s;
+}
+
+.button:hover {
+    background: rgba(75,255,110,0.22);
+
+    box-shadow:
+        0 0 40px rgba(50,255,90,0.2);
+
+    transform: translateY(-3px);
+}
+
+
+/* =========================
+   СЕКЦИИ
+========================= */
+
+.section {
+    width: min(1100px, calc(100% - 40px));
+
+    margin: auto;
+
+    padding: 100px 0;
+}
+
+.title {
+    font-size: clamp(35px, 6vw, 65px);
+
+    margin-bottom: 45px;
+
+    letter-spacing: -3px;
+}
+
+.title span {
+    color: #64ff87;
+}
+
+
+/* =========================
+   ИСТОРИЯ
+========================= */
+
+.history {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+.history-item {
+    padding: 30px 35px;
+
+    border-radius: 25px;
+
+    transition: 0.4s;
+}
+
+.history-item:hover {
+    transform: translateX(8px);
+
+    border-color:
+        rgba(100,255,130,0.35);
+}
+
+.history-item h3 {
+    font-size: 24px;
+
+    margin-bottom: 10px;
+}
+
+.history-item p {
+    color: rgba(255,255,255,0.55);
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   ФОТО
+========================= */
+
+.photo {
+    border-radius: 30px;
+
+    overflow: hidden;
+
+    margin-bottom: 25px;
+}
+
+.photo img {
+    width: 100%;
+
+    height: 600px;
+
+    object-fit: cover;
+
+    display: block;
+
+    transition: 0.7s;
+}
+
+.photo:hover img {
+    transform: scale(1.03);
+}
+
+
+/* =========================
+   КАМЕРА
+========================= */
+
+.camera-section {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 80px auto 150px;
+}
+
+.camera-card {
+    border-radius: 35px;
+
+    padding: 70px 25px;
+
+    text-align: center;
+}
+
+.camera-card h2 {
+    font-size: clamp(40px, 7vw, 70px);
+
+    letter-spacing: -3px;
+}
+
+.camera-card h2 span {
+    color: #64ff87;
+}
+
+.camera-button {
+    margin-top: 35px;
+
+    padding: 20px 38px;
+
+    border-radius: 50px;
+
+    color: white;
+
+    font-size: 17px;
+
+    background: #3edc65;
+
+    border: none;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 0 25px rgba(60,255,100,0.2);
+
+    transition: 0.2s;
+}
+
+.camera-button:hover {
+    background: #5cff7f;
+
+    box-shadow:
+        0 0 45px rgba(60,255,100,0.35);
+}
+
+.camera-button:active {
+    transform: scale(0.92);
+
+    box-shadow:
+        0 0 20px #4cff70,
+        0 0 60px #4cff70,
+        0 0 100px rgba(60,255,100,0.6);
+}
+
+
+/* =========================
+   ОКНО КАМЕРЫ
+========================= */
+
+.camera-modal {
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0,10,4,0.85);
+
+    backdrop-filter: blur(15px);
+
+    z-index: 100;
+}
+
+.camera-modal.active {
+    display: flex;
+}
+
+.camera-window {
+    width: min(1000px, 100%);
+
+    border-radius: 30px;
+
+    overflow: hidden;
+
+    position: relative;
+}
+
+
+/* Видео */
+
+.camera-view {
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 16 / 10;
+
+    background: #000;
+
+    overflow: hidden;
+}
+
+.camera-view video {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+/* =========================
+   КАРТОЧКА ИЗБУШКИ
+========================= */
+
+.camera-card-image {
+    position: absolute;
+
+    width: 190px;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%)
+        rotate(45deg);
+
+    border-radius: 12px;
+
+    opacity: 0.9;
+
+    box-shadow:
+        0 15px 50px rgba(0,0,0,0.7);
+
+    pointer-events: none;
+}
+
+
+/* Рамка */
+
+.camera-frame {
+    position: absolute;
+
+    width: 55%;
+    height: 60%;
+
+    left: 22.5%;
+    top: 20%;
+
+    border: 2px solid rgba(90,255,120,0.7);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 0 25px rgba(60,255,100,0.2);
+}
+
+
+/* Закрыть */
+
+.close {
+    position: absolute;
+
+    right: 18px;
+    top: 18px;
+
+    z-index: 10;
+
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,0.2);
+
+    background: rgba(0,0,0,0.5);
+
+    color: white;
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   ПОЯВЛЕНИЕ
+========================= */
+
+.reveal {
+    opacity: 0;
+
+    transform: translateY(35px);
+
+    transition: 0.8s;
+}
+
+.reveal.show {
+    opacity: 1;
+
+    transform: translateY(0);
+}
+
+
+/* =========================
+   ТЕЛЕФОН
+========================= */
+
+@media (max-width: 700px) {
+
+    .hero-card {
+        padding: 70px 20px;
+    }
+
+    .hero h1 {
+        letter-spacing: -3px;
+    }
+
+    .section {
+        padding: 70px 0;
+    }
+
+    .photo img {
+        height: 400px;
+    }
+
+    .history-item {
+        padding: 25px;
+    }
+
+    .camera-card {
+        padding: 55px 20px;
+    }
+
+    .camera-card-image {
+        width: 130px;
+    }
+
+}
+
+</style>
 </head>
+
+
 <body>
 
-    <header>
-        <h1>Команда Баба Яга</h1>
-        <p>История развития проекта</p>
-    </header>
 
-    <main>
-        <section class="glass-card info-section">
-            <h2>О проекте</h2>
+<!-- =========================
+     ГЛАВНАЯ
+========================= -->
+
+<section class="hero">
+
+    <div class="glass hero-card">
+
+        <h1>
+            Команда<br>
+            <span>Баба Яга</span>
+        </h1>
+
+        <p class="hero-subtitle">
+            Робототехнический проект
+        </p>
+
+        <a
+            href="#history"
+            class="button"
+        >
+            История проекта ↓
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     ИСТОРИЯ
+========================= -->
+
+<section
+    id="history"
+    class="section"
+>
+
+    <h2 class="title">
+        История <span>проекта</span>
+    </h2>
+
+
+    <div class="history">
+
+
+        <div class="glass history-item reveal">
+
+            <h3>
+                Начало
+            </h3>
+
             <p>
-                Добро пожаловать в презентацию нашей команды. Прокручивайте страницу вниз, 
-                чтобы изучить таймлайн, или нажмите кнопку ниже, чтобы включить камеру 
-                и рассмотреть проект в реальном пространстве, обходя его со всех сторон.
+                Первые идеи и создание концепции проекта.
             </p>
-        </section>
 
-        <section class="glass-card content-container">
-            <!-- Бесконечная лента таймлайна -->
-            <div class="timeline-scroll-container">
-                <div class="timeline-track">
-                    <img src="izbushka_card.jpg" alt="Этап проекта">
-                    <img src="izbushka_card.jpg" alt="Этап проекта">
-                    <img src="izbushka_card.jpg" alt="Этап проекта">
-                </div>
-            </div>
+        </div>
 
-            <!-- 
-              Компонент для запуска реальной AR-камеры телефона.
-              iOS откроет Quick Look (формат .usdz), Android откроет Scene Viewer (формат .glb).
-            -->
-            <model-viewer 
-                src="izbushka_card.glb" 
-                ios-src="izbushka_card.usdz" 
-                ar 
-                ar-modes="webxr scene-viewer quick-look" 
-                camera-controls 
-                alt="Проект в дополненной реальности">
-                
-                <button slot="ar-button" class="camera-button">
-                    Открыть камеру
-                </button>
-            </model-viewer>
-        </section>
-    </main>
 
-    <footer>
-        <p>GitHub Pages</p>
-    </footer>
+        <div class="glass history-item reveal">
+
+            <h3>
+                Разработка
+            </h3>
+
+            <p>
+                Создание конструкции, электроники и программной части.
+            </p>
+
+        </div>
+
+
+        <div class="glass history-item reveal">
+
+            <h3>
+                Испытания
+            </h3>
+
+            <p>
+                Тестирование и улучшение робота.
+            </p>
+
+        </div>
+
+
+        <div class="glass history-item reveal">
+
+            <h3>
+                Сейчас
+            </h3>
+
+            <p>
+                Проект продолжает развиваться.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     ФОТО
+========================= -->
+
+<section class="section">
+
+    <h2 class="title">
+        <span>Проект</span>
+    </h2>
+
+
+    <div class="glass photo reveal">
+
+        <img
+            src="izbushka_card.jpg"
+            alt="Избушка"
+        >
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     КАМЕРА
+========================= -->
+
+<section class="camera-section">
+
+    <div class="glass camera-card">
+
+        <h2>
+            Открыть <span>камеру</span>
+        </h2>
+
+        <button
+            id="openCamera"
+            class="camera-button"
+        >
+            Открыть камеру
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     КАМЕРА
+========================= -->
+
+<div
+    id="cameraModal"
+    class="camera-modal"
+>
+
+    <div class="glass camera-window">
+
+
+        <button
+            id="closeCamera"
+            class="close"
+        >
+            ×
+        </button>
+
+
+        <div class="camera-view">
+
+
+            <video
+                id="cameraVideo"
+                autoplay
+                playsinline
+            ></video>
+
+
+            <img
+                src="izbushka_card.jpg"
+                class="camera-card-image"
+                alt="Избушка"
+            >
+
+
+            <div class="camera-frame"></div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* =========================
+   КАМЕРА
+========================= */
+
+const openButton =
+    document.getElementById("openCamera");
+
+const closeButton =
+    document.getElementById("closeCamera");
+
+const modal =
+    document.getElementById("cameraModal");
+
+const video =
+    document.getElementById("cameraVideo");
+
+
+let stream = null;
+
+
+openButton.onclick = async () => {
+
+    modal.classList.add("active");
+
+    try {
+
+        stream =
+            await navigator.mediaDevices
+            .getUserMedia({
+
+                video: {
+                    facingMode: {
+                        ideal: "environment"
+                    }
+                },
+
+                audio: false
+
+            });
+
+        video.srcObject = stream;
+
+    }
+
+    catch (error) {
+
+        alert(
+            "Разреши доступ к камере браузеру."
+        );
+
+    }
+
+};
+
+
+function closeCamera() {
+
+    modal.classList.remove("active");
+
+    if (stream) {
+
+        stream.getTracks()
+            .forEach(track => track.stop());
+
+        stream = null;
+
+    }
+
+    video.srcObject = null;
+
+}
+
+
+closeButton.onclick =
+    closeCamera;
+
+
+modal.onclick = (event) => {
+
+    if (event.target === modal) {
+        closeCamera();
+    }
+
+};
+
+
+document.onkeydown = (event) => {
+
+    if (event.key === "Escape") {
+        closeCamera();
+    }
+
+};
+
+
+/* =========================
+   АНИМАЦИЯ
+========================= */
+
+const elements =
+    document.querySelectorAll(".reveal");
+
+
+const observer =
+    new IntersectionObserver(
+        entries => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+
+                    entry.target
+                        .classList
+                        .add("show");
+
+                    observer.unobserve(
+                        entry.target
+                    );
+
+                }
+
+            });
+
+        },
+        {
+            threshold: 0.15
+        }
+    );
+
+
+elements.forEach(element => {
+
+    observer.observe(element);
+
+});
+
+</script>
 
 </body>
 </html>
