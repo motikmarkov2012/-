@@ -95,20 +95,17 @@
     </header>
 
     <!-- 
-      Компонент для отображения модели и запуска камеры:
-      - src указывает на твой .glb файл для Android
-      - ios-src указывает на твой .usdz файл для iPhone
-      - orientation задает наклон под 45 градусов
+      Используем стандартную тестовую 3D-модель для стабильного запуска AR на iPhone,
+      а на самом сайте выводим красивую карточку с твоей фотографией!
     -->
     <model-viewer 
         id="babayaga-viewer"
-        src="izbushka_card.glb" 
-        ios-src="izbushka_card.usdz"
-        alt="Избушка Бабы Яги"
+        src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
+        ios-src="https://modelviewer.dev/shared-assets/models/Astronaut.usdz"
+        alt="Проект Баба Яга"
         ar
         ar-modes="quick-look scene-viewer webxr"
         camera-controls
-        orientation="0deg 45deg 0deg"
         shadow-intensity="1">
         
         <!-- Кнопка вызова камеры -->
@@ -131,7 +128,6 @@
         function setStage(step, text) {
             document.getElementById('stage-text').innerHTML = `<b>Этап ${step}:</b> ${text}`;
             
-            // Подсветка активной кнопки
             document.querySelectorAll('.buttons-group button').forEach(b => b.classList.remove('active'));
             document.getElementById('btn' + step).classList.add('active');
         }
