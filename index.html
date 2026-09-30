@@ -3,204 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Проект: Избушка Бабы Яги 2.0 </title>
+    <title>Команда Баба Яга - История развития проекта</title>
     <style>
         :root {
             --primary-green: #2e7d32;
             --dark-green: #1b5e20;
             --light-green: #e8f5e9;
-            --bg-color: #f4f9f4;
-            --text-main: #2c3e50;
-            --text-muted: #555555;
-            --white: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(46, 125, 50, 0.2);
+            --text-main: #1e293b;
+            --text-muted: #475569;
         }
 
         body {
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
             color: var(--text-main);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            align-items: center;
         }
 
         header {
-            background-color: var(--white);
-            border-bottom: 2px solid var(--light-green);
-            padding: 20px;
             text-align: center;
+            padding: 40px 20px 20px 20px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         header h1 {
-            margin: 0;
-            font-size: 1.8rem;
+            margin: 0 0 10px 0;
+            font-size: 2.2rem;
             color: var(--dark-green);
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 500;
         }
 
         main {
-            flex: 1;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 30px 20px;
-            box-sizing: border-box;
             width: 100%;
+            max-width: 900px;
+            padding: 20px;
+            box-sizing: border-box;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
         }
 
-        .info-section {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.05);
-            margin-bottom: 30px;
-            border-left: 5px solid var(--primary-green);
+        /* Эффект жидкого стекла (Glassmorphism) */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
         }
 
         .info-section h2 {
             margin-top: 0;
             color: var(--dark-green);
-            font-size: 1.4rem;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
         }
 
         .info-section p {
             line-height: 1.6;
             color: var(--text-muted);
-            margin-bottom: 15px;
+            margin: 0;
         }
 
-        .photo-container {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 20px;
+        .content-container {
             text-align: center;
-            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.05);
         }
 
-        .photo-preview {
+        /* Длинная фотография с прокруткой */
+        .long-photo-wrapper {
             width: 100%;
-            max-height: 500px;
-            object-fit: contain;
-            border-radius: 8px;
-            background-color: var(--light-green);
-            margin-bottom: 20px;
-            cursor: pointer;
+            max-height: 450px;
+            overflow-y: auto;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: #ffffff;
+            margin-bottom: 25px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.04);
         }
 
-        .ar-button {
+        .long-photo {
+            width: 100%;
+            display: block;
+            height: auto;
+        }
+
+        /* Кнопка с подсветкой */
+        .camera-button {
             background-color: var(--primary-green);
-            color: var(--white);
+            color: #ffffff;
             border: none;
-            padding: 14px 28px;
-            font-size: 1rem;
+            padding: 16px 32px;
+            font-size: 1.1rem;
             font-weight: 600;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
             width: 100%;
-            max-width: 350px;
-            text-decoration: none;
-            display: inline-block;
+            max-width: 380px;
         }
 
-        .ar-button:hover {
+        .camera-button:hover {
             background-color: var(--dark-green);
+            box-shadow: 0 6px 20px rgba(27, 94, 32, 0.4);
+            transform: translateY(-2px);
         }
 
-        .ar-button:active {
-            transform: scale(0.98);
+        .camera-button:active {
+            transform: translateY(1px);
+        }
+
+        /* Полноэкранный режим «Камеры» с наклоном 45 градусов и вращением */
+        .camera-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 20, 10, 0.92);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            perspective: 1200px;
+            overflow: hidden;
+        }
+
+        .camera-overlay.active {
+            display: flex;
+        }
+
+        .rotating-card-container {
+            width: 85%;
+            max-width: 500px;
+            transform-style: preserve-3d;
+            animation: slowRotate 12s infinite linear;
+        }
+
+        .rotating-photo {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            /* Наклон 45 градусов по оси X и Y */
+            transform: rotateX(25deg) rotateY(-20deg);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes slowRotate {
+            0% {
+                transform: rotateY(0deg) rotateX(15deg);
+            }
+            50% {
+                transform: rotateY(180deg) rotateX(-15deg);
+            }
+            100% {
+                transform: rotateY(360deg) rotateX(15deg);
+            }
+        }
+
+        .close-hint {
+            position: absolute;
+            bottom: 30px;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            pointer-events: none;
         }
 
         footer {
             text-align: center;
             padding: 20px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
-            background-color: var(--white);
-            border-top: 1px solid var(--light-green);
-        }
-
-        /* Модальное окно для просмотра фото на весь экран */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal img {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 8px;
-        }
-
-        .modal.active {
-            display: flex;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Проект: Избушка Бабы Яги</h1>
+        <h1>Команда Баба Яга</h1>
+        <p>История развития проекта</p>
     </header>
 
     <main>
-        <section class="info-section">
+        <section class="glass-card info-section">
             <h2>О проекте</h2>
             <p>
-                Данный проект представляет собой детальную конструкцию избушки на курьих ножках. 
-                Здесь собраны ключевые этапы сборки, инженерные решения и эволюция создания объекта.
-            </p>
-            <p>
-                Нажмите на кнопку ниже или на само изображение, чтобы открыть полную историю развития проекта в высоком разрешении.
+                Добро пожаловать на страницу нашей команды. Ниже представлена полная визуальная хронология 
+                создания и эволюции проекта избушки на курьих ножках — от первых набросков и заготовок до финальной сборки.
             </p>
         </section>
 
-        <section class="photo-container">
-            <!-- Твоя фотография (замени имя файла, если потребуется) -->
-            <img src="izbushka_card.jpg" alt="История развития проекта" class="photo-preview" id="projectPhoto">
-            
-            <br>
+        <section class="glass-card content-container">
+            <!-- Окно с длинной фотографией проекта -->
+            <div class="long-photo-wrapper">
+                <img src="izbushka_card.jpg" alt="История развития проекта" class="long-photo">
+            </div>
 
-            <!-- Кнопка с точным названием -->
-            <button class="ar-button" id="openModalBtn">
-                История развития проекта
+            <!-- Кнопка открытия камеры с подсветкой -->
+            <button class="camera-button" id="openCameraBtn">
+                Открыть камеру
             </button>
         </section>
     </main>
 
-    <!-- Полноэкранный просмотр фото -->
-    <div class="modal" id="photoModal">
-        <img src="izbushka_card.jpg" alt="История развития проекта в деталях">
+    <!-- Имитация режима камеры с наклоном 45 градусов и вращением -->
+    <div class="camera-overlay" id="cameraOverlay">
+        <div class="rotating-card-container">
+            <img src="izbushka_card.jpg" alt="Проект в AR" class="rotating-photo">
+        </div>
+        <div class="close-hint">Нажмите в любое место, чтобы закрыть</div>
     </div>
 
     <footer>
-        <p>GitHub Pages Deployment</p>
+        <p>GitHub Pages</p>
     </footer>
 
     <script>
-        const modal = document.getElementById('photoModal');
-        const photo = document.getElementById('projectPhoto');
-        const btn = document.getElementById('openModalBtn');
+        const openBtn = document.getElementById('openCameraBtn');
+        const overlay = document.getElementById('cameraOverlay');
 
-        function showModal() {
-            modal.classList.add('active');
-        }
+        openBtn.addEventListener('click', () => {
+            overlay.classList.add('active');
+        });
 
-        function hideModal() {
-            modal.classList.remove('active');
-        }
-
-        photo.addEventListener('click', showModal);
-        btn.addEventListener('click', showModal);
-        modal.addEventListener('click', hideModal);
+        overlay.addEventListener('click', () => {
+            overlay.classList.remove('active');
+        });
     </script>
 
 </body>
