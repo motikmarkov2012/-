@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Таймлайн проекта «Баба Яга» — AR</title>
-    <!-- Подключаем официальный компонент Google Model Viewer -->
+    <!-- Подключаем библиотеку Model Viewer -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
         body {
@@ -27,59 +27,64 @@
             margin: 0;
         }
 
-        /* Область предпросмотра 3D */
+        /* 3D и AR сцена на экране */
         model-viewer {
             width: 100vw;
-            height: 50vh;
+            height: 52vh;
             background-color: #1a1a1a;
         }
 
-        /* Кнопка запуска AR-камеры */
+        /* Кнопка запуска камеры */
         #ar-button {
-            background: #007aff;
+            background: #ff4757;
             color: white;
             border: none;
             padding: 12px 24px;
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 15px;
+            font-weight: bold;
             border-radius: 25px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.4);
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        #ar-button:active {
+            transform: scale(0.95);
         }
 
         /* Панель таймлайна */
         .timeline-container {
-            padding: 20px;
+            padding: 15px;
             background: #1c1c1e;
-            margin: 15px;
+            margin: 10px;
             border-radius: 14px;
         }
 
         .timeline-container p {
-            margin: 0 0 12px 0;
+            margin: 0 0 10px 0;
             font-size: 14px;
-            color: #bbb;
+            color: #ccc;
         }
 
         .buttons-group {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .buttons-group button {
             background: #2c2c2e;
             color: white;
-            border: 1px solid #007aff;
+            border: 1px solid #ff4757;
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 13px;
             cursor: pointer;
+            transition: background 0.2s;
         }
 
-        .buttons-group button:active {
-            background: #007aff;
+        .buttons-group button.active, .buttons-group button:hover {
+            background: #ff4757;
         }
     </style>
 </head>
@@ -90,10 +95,10 @@
     </header>
 
     <!-- 
-      Главный компонент AR:
-      - ios-src: файл для iPhone (.usdz)
-      - src: файл для Android (.glb)
-      Если этих файлов нет в папке сайта, айфон сбросит страницу. 
+      Компонент для отображения модели и запуска камеры:
+      - src указывает на твой .glb файл для Android
+      - ios-src указывает на твой .usdz файл для iPhone
+      - orientation задает наклон под 45 градусов
     -->
     <model-viewer 
         id="babayaga-viewer"
@@ -108,23 +113,27 @@
         
         <!-- Кнопка вызова камеры -->
         <button slot="ar-button" id="ar-button">
-            📦 Запустить AR камеру
+            📷 Открыть камеру и ходить вокруг
         </button>
     </model-viewer>
 
     <!-- Блок таймлайна -->
     <div class="timeline-container">
-        <p id="stage-text"><b>Этап 1:</b> Зарождение идеи</p>
+        <p id="stage-text"><b>Этап 1:</b> Зарождение идеи проекта</p>
         <div class="buttons-group">
-            <button onclick="setStage(1, 'Зарождение идеи')">Шаг 1</button>
-            <button onclick="setStage(2, 'Создание прототипа')">Шаг 2</button>
-            <button onclick="setStage(3, 'Финальный проект')">Шаг 3</button>
+            <button id="btn1" class="active" onclick="setStage(1, 'Зарождение идеи проекта')">Шаг 1</button>
+            <button id="btn2" onclick="setStage(2, 'Создание макета избушки')">Шаг 2</button>
+            <button id="btn3" onclick="setStage(3, 'Финальный релиз')">Шаг 3</button>
         </div>
     </div>
 
     <script>
         function setStage(step, text) {
             document.getElementById('stage-text').innerHTML = `<b>Этап ${step}:</b> ${text}`;
+            
+            // Подсветка активной кнопки
+            document.querySelectorAll('.buttons-group button').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn' + step).classList.add('active');
         }
     </script>
 
