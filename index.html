@@ -1,474 +1,245 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Баба Яга — AR Photo</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script
-        type="module"
-        src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js">
-    </script>
-
-    <style>
-        body {
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Roboto,
-                sans-serif;
-        }
-
-        model-viewer {
-            width: 100%;
-            height: 100%;
-            --poster-color: transparent;
-            background: transparent;
-        }
-
-        #viewer-container {
-            z-index: 20;
-        }
-
-        #status {
-            position: fixed;
-            left: 50%;
-            bottom: 22px;
-            transform: translateX(-50%);
-
-            z-index: 60;
-
-            padding: 10px 15px;
-
-            border: 1px solid rgba(255,255,255,.1);
-
-            background: rgba(24,24,27,.88);
-
-            backdrop-filter: blur(12px);
-
-            color: #a1a1aa;
-
-            font-size: 12px;
-
-            display: none;
-        }
-
-        #status.show {
-            display: block;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Звёзды — Лида и Алиса</title>
+<style>
+:root{--ink:#1c2024;--muted:#697076;--blue:#26649d;--pale:#eef5fb;--line:#e4e8eb;--gold:#f4bf45}
+*{box-sizing:border-box}
+body{margin:0;background:#f7f9fa;color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+button,input,select{font:inherit}button{cursor:pointer}
+.topbar{height:76px;padding:0 clamp(20px,6vw,84px);display:flex;align-items:center;justify-content:space-between;background:white;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px;font-weight:750}
+.brand-mark{width:38px;height:38px;border-radius:12px;background:var(--blue);color:white;display:grid;place-items:center;font-size:20px}
+.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.18em;font-weight:700;margin-top:2px}
+.top-label{font-size:11px;letter-spacing:.18em;color:var(--muted);font-weight:700}
+.wrap{width:min(1050px,calc(100% - 40px));margin:auto}
+.hero{padding:54px 0 26px}
+.eyebrow{font-size:11px;letter-spacing:.2em;color:var(--blue);font-weight:800;text-transform:uppercase}
+.hero h1{font-size:clamp(32px,5vw,52px);line-height:1.08;letter-spacing:-.04em;margin:12px 0}
+.hero p,.sub{color:var(--muted)}
+.accent{color:var(--blue)}
+.panel{background:white;border:1px solid var(--line);border-radius:22px;box-shadow:0 16px 50px #172b3d0d;padding:clamp(22px,4vw,36px);margin-bottom:24px}
+.login-grid,.tools{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.account{display:flex;align-items:center;gap:13px;border:1px solid var(--line);border-radius:16px;padding:16px;background:white;text-align:left}
+.avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;background:var(--pale);display:grid;place-items:center;font-size:22px;color:var(--blue);overflow:hidden;flex:none}
+.account strong{display:block}.account span{color:var(--muted);font-size:12px}
+.account.selected{border-color:#7aa7ca;box-shadow:0 0 0 3px #26649d12}
+.section-title{font-size:18px;margin:0 0 8px}
+.sub{font-size:14px;margin:0 0 22px}
+.field-label{font-size:12px;color:var(--muted);font-weight:700;margin:0 0 8px;display:block}
+.input{width:100%;border:1px solid #dce2e6;border-radius:11px;padding:13px 14px;background:white;outline:none}
+.input:focus{border-color:#75a1c4;box-shadow:0 0 0 3px #26649d14}
+.field{margin:0 0 15px}
+.btn{border:0;border-radius:11px;padding:13px 18px;background:var(--blue);color:white;font-weight:700}
+.btn:hover{background:#194e7d}.btn.secondary{background:#edf3f7;color:var(--blue)}.btn.ghost{background:transparent;color:var(--muted)}
+.btn.full{width:100%}
+.login-note{font-size:12px;color:var(--muted);line-height:1.6;margin:13px 0 0}
+.hidden{display:none!important}
+.error{color:#bd4242;font-size:13px;margin:10px 0 0;min-height:18px}
+.dashboard-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}
+.greeting{font-size:14px;color:var(--muted)}
+.greeting strong{color:var(--ink);font-size:20px;display:block;margin-bottom:4px}
+.stars-card{padding:28px;border-radius:18px;background:linear-gradient(135deg,#f3f8fc,white);border:1px solid #e5edf3;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.star-count{font-size:clamp(50px,8vw,76px);font-weight:800;letter-spacing:-.06em;color:var(--blue);line-height:1}
+.star-count small{font-size:15px;letter-spacing:0;color:var(--muted);font-weight:650}
+.big-star{font-size:42px;color:var(--gold)}
+.tool{border:1px solid var(--line);border-radius:15px;padding:18px}
+.tool h3{font-size:15px;margin:0 0 6px}
+.tool p{font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.5}
+.inline{display:flex;gap:9px}
+.inline .input{min-width:0}
+.admin-tag{padding:7px 10px;border-radius:30px;background:#edf3f7;color:var(--blue);font-size:11px;font-weight:750}
+.avatar-row{display:flex;align-items:center;gap:14px}
+.avatar-row .avatar{width:62px;height:62px;font-size:26px}
+.file{font-size:12px;color:var(--muted)}
+.history{margin-top:23px;border-top:1px solid var(--line);padding-top:20px}
+.history h3{font-size:14px;margin:0 0 10px}
+.history-list{display:grid;gap:7px}
+.history-item{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:15px}
+.history-item b{color:var(--ink)}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#20272d;color:white;border-radius:11px;padding:12px 17px;z-index:4}
+.modal-back{position:fixed;inset:0;background:#17222b66;display:grid;place-items:center;padding:20px;z-index:3}
+.modal{width:min(430px,100%);background:white;padding:26px;border-radius:18px;box-shadow:0 25px 80px #1114}
+.modal h2{font-size:21px;margin:0 0 8px}
+.modal p{font-size:13px;color:var(--muted);line-height:1.55}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.footer{padding:22px 0 35px;color:#8a9298;font-size:11px;text-align:center}
+@media(max-width:650px){.topbar{height:66px}.top-label{display:none}.hero{padding:40px 0 22px}.login-grid,.tools{grid-template-columns:1fr}.stars-card{padding:22px}.panel{border-radius:18px}}
+</style>
 </head>
-
-
-<body
-    class="
-        bg-zinc-950
-        text-zinc-100
-        h-screen
-        w-screen
-        overflow-hidden
-        flex
-        flex-col
-        justify-between
-        select-none
-    "
->
-
-
-<!-- ==============================
-     ШАПКА
-================================ -->
-
-<header
-    class="
-        w-full
-        p-6
-        flex
-        justify-between
-        items-center
-        border-b
-        border-zinc-900
-        z-10
-    "
->
-
-    <h1
-        class="
-            text-xs
-            tracking-widest
-            uppercase
-            text-zinc-500
-        "
-    >
-        Баба Яга
-    </h1>
-
-
-    <span class="text-xs text-blue-500">
-        AR
-    </span>
-
+<body>
+<header class="topbar">
+  <div class="brand"><div class="brand-mark">✦</div><div>ЗВЁЗДЫ<small>LIDA & ALICE</small></div></div>
+  <div class="top-label">MY LITTLE PROJECT&nbsp; / &nbsp;01</div>
 </header>
 
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Наша общая копилка</div>
+    <h1>Каждая звезда —<br><span class="accent">маленькая победа.</span></h1>
+    <p>Выбери свой аккаунт, чтобы посмотреть свои звёзды.</p>
+  </section>
 
+  <section id="login" class="panel">
+    <h2 class="section-title">Кто сегодня здесь?</h2>
+    <p class="sub">Выбери имя и войди в свой аккаунт.</p>
+    <div class="login-grid">
+      <button class="account selected" data-user="lida" type="button"><div class="avatar" id="pick-lida">Л</div><div><strong>Лида</strong><span>Личный кабинет</span></div></button>
+      <button class="account" data-user="alisa" type="button"><div class="avatar" id="pick-alisa">А</div><div><strong>Алиса</strong><span>Личный кабинет</span></div></button>
+    </div>
+    <div style="margin-top:22px">
+      <label class="field-label" for="password">Пароль</label>
+      <input class="input" id="password" type="password" placeholder="Введи пароль">
+      <div id="confirm-wrap" class="field hidden" style="margin-top:14px">
+        <label class="field-label" for="confirm">Повтори пароль для подтверждения</label>
+        <input class="input" id="confirm" type="password" placeholder="Введи пароль ещё раз">
+      </div>
+      <p id="login-error" class="error"></p>
+      <button id="login-button" class="btn full" type="button">Продолжить</button>
+      <p class="login-note">При первом входе придумай пароль и введи его два раза. Потом этот же пароль будет открывать аккаунт на этом устройстве.</p>
+    </div>
+  </section>
 
-<!-- ==============================
-     ГЛАВНЫЙ ЭКРАН
-================================ -->
-
-<main
-    id="welcome-screen"
-    class="
-        flex-1
-        flex
-        flex-col
-        items-center
-        justify-center
-        px-4
-    "
->
-
-    <button
-        id="open-ar-btn"
-        disabled
-        class="
-            px-8
-            py-4
-            bg-blue-600
-            hover:bg-blue-500
-            disabled:bg-zinc-800
-            disabled:text-zinc-500
-            text-white
-            text-sm
-            font-medium
-            tracking-wide
-            transition-colors
-            shadow-lg
-            shadow-blue-950/50
-        "
-    >
-        Подготовка…
-    </button>
-
+  <section id="dashboard" class="panel hidden">
+    <div class="dashboard-head">
+      <div class="greeting"><strong id="welcome">Привет!</strong><span id="role-label">Твои звёзды</span></div>
+      <div style="display:flex;align-items:center;gap:10px"><span id="admin-tag" class="admin-tag hidden">ГЛАВНЫЙ</span><button id="logout" class="btn ghost" type="button">Выйти ↗</button></div>
+    </div>
+    <div class="stars-card">
+      <div><div class="star-count"><span id="star-count">0</span> <small>звёзд</small></div><div class="greeting" style="margin-top:9px">Твой личный результат</div></div>
+      <div class="big-star">★</div>
+    </div>
+    <div id="kid-tools" class="tools">
+      <div class="tool">
+        <h3>Поделиться звёздами</h3><p>Переведи часть своих звёзд Лиде или Алисе.</p>
+        <div class="inline"><input id="transfer-amount" class="input" type="number" min="1" step="1" placeholder="Сколько"><button id="transfer" class="btn" type="button">Перевести</button></div>
+      </div>
+      <div class="tool">
+        <h3>Моя аватарка</h3><p>Загрузи картинку один раз и получи 5 звёзд.</p>
+        <div class="avatar-row"><div class="avatar" id="current-avatar">Л</div><div><label class="btn secondary" for="avatar-file" style="display:inline-block">Выбрать фото</label><input id="avatar-file" class="hidden" type="file" accept="image/*"><div id="avatar-status" class="file" style="margin-top:8px">Можно загрузить один раз.</div></div></div>
+      </div>
+    </div>
+    <div id="admin-tools" class="tool hidden" style="margin-top:15px">
+      <h3>Управление звёздами</h3><p>Прибавь или вычти звёзды выбранному аккаунту.</p>
+      <div class="inline" style="flex-wrap:wrap">
+        <select id="admin-target" class="input" style="flex:1 1 120px"><option value="lida">Лида</option><option value="alisa">Алиса</option></select>
+        <input id="admin-amount" class="input" type="number" min="1" step="1" placeholder="Количество" style="flex:1 1 110px">
+        <button id="add-stars" class="btn" type="button">+ Добавить</button><button id="remove-stars" class="btn secondary" type="button">− Вычесть</button>
+      </div>
+    </div>
+    <div class="history"><h3>Последние изменения</h3><div id="history-list" class="history-list"></div></div>
+  </section>
+  <div class="footer">MY FUTURE PROFESSION&nbsp; · &nbsp;ENGINEER</div>
 </main>
 
-
-
-<!-- ==============================
-     AR / 3D VIEWER
-================================ -->
-
-<div
-    id="viewer-container"
-    class="
-        absolute
-        inset-0
-        pt-20
-        pb-6
-        px-4
-        hidden
-        bg-zinc-950
-    "
->
-
-    <div class="flex-1 w-full h-full relative">
-
-        <model-viewer
-            id="ar-model-viewer"
-
-            src="izbushka_photo_ar.glb"
-
-            ar
-
-            ar-modes="
-                scene-viewer
-                quick-look
-                webxr
-            "
-
-            ar-scale="fixed"
-
-            camera-controls
-
-            touch-action="pan-y"
-
-            interaction-prompt="none"
-
-            autoplay
-
-            shadow-intensity="0.8"
-
-            exposure="1"
-
-            class="w-full h-full cursor-pointer"
-        >
-        </model-viewer>
-
-    </div>
-
-
-    <div
-        class="
-            absolute
-            bottom-5
-            left-1/2
-            -translate-x-1/2
-            z-20
-
-            bg-zinc-900/80
-
-            border
-            border-zinc-800
-
-            px-5
-            py-3
-
-            backdrop-blur-md
-
-            text-xs
-            text-zinc-400
-
-            shadow-xl
-
-            whitespace-nowrap
-        "
-    >
-        В AR можно ходить вокруг фотографии
-    </div>
-
+<div id="modal" class="modal-back hidden">
+  <div class="modal">
+    <h2>Пароль главного</h2><p>Введи пароль, чтобы открыть режим управления звёздами.</p>
+    <label class="field-label" for="admin-password">Пароль</label><input id="admin-password" class="input" type="password">
+    <p id="admin-error" class="error"></p>
+    <div class="modal-actions"><button id="cancel-admin" class="btn secondary" type="button">Назад</button><button id="enter-admin" class="btn" type="button">Войти</button></div>
+  </div>
 </div>
-
-
-
-<!-- ==============================
-     СТАТУС
-================================ -->
-
-<div id="status"></div>
-
-
+<div id="toast" class="toast hidden"></div>
 
 <script>
-
-const openArBtn =
-    document.getElementById(
-        'open-ar-btn'
-    );
-
-
-const welcomeScreen =
-    document.getElementById(
-        'welcome-screen'
-    );
-
-
-const viewerContainer =
-    document.getElementById(
-        'viewer-container'
-    );
-
-
-const modelViewer =
-    document.getElementById(
-        'ar-model-viewer'
-    );
-
-
-const status =
-    document.getElementById(
-        'status'
-    );
-
-
-let modelLoaded = false;
-
-
-
-/* ==============================
-   СТАТУС
-================================ */
-
-function setStatus(text) {
-
-    status.textContent = text;
-
-    status.classList.add('show');
-
-    clearTimeout(setStatus.timer);
-
-    setStatus.timer =
-        setTimeout(() => {
-
-            status.classList.remove('show');
-
-        }, 4000);
-
-}
-
-
-
-/* ==============================
-   ОБЫЧНЫЙ ПРОСМОТР
-================================ */
-
-function showViewer() {
-
-    welcomeScreen.classList.add(
-        'hidden'
-    );
-
-    viewerContainer.classList.remove(
-        'hidden'
-    );
-
-}
-
-
-
-/* ==============================
-   ЗАГРУЗКА GLB
-================================ */
-
-modelViewer.addEventListener(
-    'load',
-    () => {
-
-        modelLoaded = true;
-
-        openArBtn.disabled = false;
-
-        openArBtn.textContent =
-            'Запустить камеру';
-
-    },
-    {
-        once: true
+(()=>{
+  // Данные сайта сохраняются в localStorage текущего браузера.
+  const KEY='star-club-v1',ADMIN_PASSWORD='Sun';
+  const defaults={users:{lida:{password:null,stars:0,avatar:null,avatarRewarded:false},alisa:{password:null,stars:0,avatar:null,avatarRewarded:false}},history:[]};
+  let state;
+  try{state=JSON.parse(localStorage.getItem(KEY))||defaults}catch{state=defaults}
+  state.users ||= defaults.users;
+  for(const id of ['lida','alisa'])state.users[id] ||= defaults.users[id];
+  state.history ||= [];
+  let selected='lida',current=null,toastTimer;
+  const $=id=>document.getElementById(id),save=()=>localStorage.setItem(KEY,JSON.stringify(state));
+  const name=id=>id==='alisa'?'Алиса':'Лида';
+  let escaped=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function toast(msg){$('toast').textContent=msg;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),2500)}
+  function log(msg){state.history.unshift({msg,time:new Date().toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})});state.history=state.history.slice(0,8);save()}
+  function setPickAvatars(){for(const id of ['lida','alisa']){const el=$('pick-'+id),u=state.users[id];el.innerHTML=u.avatar?`<img src="${u.avatar}" alt="" style="width:100%;height:100%;object-fit:cover">`:name(id)[0]}}
+  function render(){
+    const admin=current==='admin';
+    $('login').classList.toggle('hidden',!!current);$('dashboard').classList.toggle('hidden',!current);
+    if(!current)return;
+    $('welcome').textContent=admin?'Привет, главный!':`Привет, ${name(current)}!`;
+    $('role-label').textContent=admin?'Ты управляешь звёздами':'Твои звёзды';
+    $('admin-tag').classList.toggle('hidden',!admin);$('kid-tools').classList.toggle('hidden',admin);$('admin-tools').classList.toggle('hidden',!admin);
+    $('star-count').textContent=admin?'★':state.users[current].stars;
+    if(!admin){
+      const u=state.users[current];
+      $('current-avatar').innerHTML=u.avatar?`<img src="${u.avatar}" alt="Аватарка" style="width:100%;height:100%;object-fit:cover">`:name(current)[0];
+      $('avatar-file').disabled=!!u.avatarRewarded;
+      $('avatar-status').textContent=u.avatarRewarded?'Аватарка уже загружена. Награда получена.':'Можно загрузить один раз.';
     }
-);
-
-
-
-/* ==============================
-   ОШИБКА ЗАГРУЗКИ
-================================ */
-
-modelViewer.addEventListener(
-    'error',
-    () => {
-
-        openArBtn.disabled = true;
-
-        openArBtn.textContent =
-            'Ошибка загрузки';
-
-        setStatus(
-            'Не удалось загрузить izbushka_photo_ar.glb'
-        );
-
-    }
-);
-
-
-
-/* ==============================
-   ЗАПУСК AR
-================================ */
-
-openArBtn.addEventListener(
-    'click',
-    async () => {
-
-        if (!modelLoaded) {
-            return;
-        }
-
-
-        try {
-
-            await modelViewer.activateAR();
-
-        }
-
-        catch (error) {
-
-            console.error(error);
-
-            showViewer();
-
-            setStatus(
-                'AR недоступен — открыт 3D-просмотр'
-            );
-
-        }
-
-    }
-);
-
-
-
-/* ==============================
-   СТАТУС AR
-================================ */
-
-modelViewer.addEventListener(
-    'ar-status',
-    (event) => {
-
-        const s =
-            event.detail?.status || '';
-
-
-        if (
-            s === 'session-started'
-        ) {
-
-            viewerContainer.classList.remove(
-                'hidden'
-            );
-
-            welcomeScreen.classList.add(
-                'hidden'
-            );
-
-        }
-
-
-        if (
-            s === 'failed'
-        ) {
-
-            setStatus(
-                'Не удалось запустить AR. ' +
-                'Проверь разрешение камеры.'
-            );
-
-        }
-
-    }
-);
-
-
-
-/* ==============================
-   AR TRACKING
-================================ */
-
-modelViewer.addEventListener(
-    'ar-tracking',
-    (event) => {
-
-        console.log(
-            'AR tracking:',
-            event.detail
-        );
-
-    }
-);
-
+    $('history-list').innerHTML=state.history.length?state.history.slice(0,6).map(x=>`<div class="history-item"><b>${escaped(x.msg)}</b><span>${escaped(x.time)}</span></div>`).join(''):'<div class="history-item">Пока изменений нет</div>';
+    setPickAvatars();
+  }
+  document.querySelectorAll('.account').forEach(b=>b.addEventListener('click',()=>{
+    selected=b.dataset.user;document.querySelectorAll('.account').forEach(x=>x.classList.toggle('selected',x===b));
+    $('confirm-wrap').classList.toggle('hidden',!!state.users[selected].password);
+    $('login-error').textContent='';$('password').value='';$('confirm').value='';
+    $('login-button').textContent=state.users[selected].password?'Войти':'Создать аккаунт';
+  }));
+  function signIn(){
+    const p=$('password').value;
+    if(!p){$('login-error').textContent='Введи пароль.';return}
+    if(p===ADMIN_PASSWORD){$('modal').classList.remove('hidden');$('admin-password').value='';$('admin-error').textContent='';return}
+    const u=state.users[selected];
+    if(!u.password){
+      if(p!==$('confirm').value){$('login-error').textContent='Пароли не совпадают. Проверь и попробуй ещё раз.';return}
+      u.password=p;save();toast('Аккаунт создан. Добро пожаловать!');
+    }else if(p!==u.password){$('login-error').textContent='Пароль не подошёл. Попробуй ещё раз.';return}
+    current=selected;render();
+  }
+  $('login-button').addEventListener('click',signIn);
+  $('password').addEventListener('keydown',e=>{if(e.key==='Enter')signIn()});
+  $('confirm').addEventListener('keydown',e=>{if(e.key==='Enter')signIn()});
+  $('enter-admin').addEventListener('click',()=>{
+    if($('admin-password').value!==ADMIN_PASSWORD){$('admin-error').textContent='Неверный пароль.';return}
+    $('modal').classList.add('hidden');current='admin';render();
+  });
+  $('admin-password').addEventListener('keydown',e=>{if(e.key==='Enter')$('enter-admin').click()});
+  $('cancel-admin').addEventListener('click',()=>$('modal').classList.add('hidden'));
+  $('logout').addEventListener('click',()=>{current=null;$('password').value='';render()});
+  $('transfer').addEventListener('click',()=>{
+    const amount=Number($('transfer-amount').value);
+    if(!Number.isInteger(amount)||amount<1){toast('Укажи целое число звёзд.');return}
+    if(state.users[current].stars<amount){toast('У тебя пока нет столько звёзд.');return}
+    const target=current==='lida'?'alisa':'lida';
+    state.users[current].stars-=amount;state.users[target].stars+=amount;
+    log(`${name(current)} перевела ${amount} ★ ${name(target)}`);
+    $('transfer-amount').value='';render();toast(`Звёзды отправлены ${name(target)}!`);
+  });
+  function adminChange(sign){
+    const amount=Number($('admin-amount').value),target=$('admin-target').value;
+    if(!Number.isInteger(amount)||amount<1){toast('Укажи целое число звёзд.');return}
+    if(sign<0&&state.users[target].stars<amount){toast('Нельзя списать больше звёзд, чем есть.');return}
+    state.users[target].stars+=sign*amount;
+    log(`${sign>0?'Добавлено':'Списано'} ${amount} ★ · ${name(target)}`);
+    $('admin-amount').value='';render();toast(sign>0?'Звёзды добавлены.':'Звёзды списаны.');
+  }
+  $('add-stars').addEventListener('click',()=>adminChange(1));
+  $('remove-stars').addEventListener('click',()=>adminChange(-1));
+  $('avatar-file').addEventListener('change',e=>{
+    const file=e.target.files[0],u=state.users[current];
+    if(!file)return;
+    if(u.avatarRewarded){toast('Аватарку можно загрузить только один раз.');return}
+    if(!file.type.startsWith('image/')){toast('Выбери файл изображения.');return}
+    if(file.size>2*1024*1024){toast('Изображение должно быть меньше 2 МБ.');e.target.value='';return}
+    const reader=new FileReader();
+    reader.onload=()=>{
+      u.avatar=reader.result;u.avatarRewarded=true;u.stars+=5;
+      log(`${name(current)} получила 5 ★ за аватарку`);save();render();toast('Аватарка добавлена — начислено 5 звёзд!');
+    };
+    reader.readAsDataURL(file);
+  });
+  setPickAvatars();
+  $('login-button').textContent=state.users[selected].password?'Войти':'Создать аккаунт';
+})();
 </script>
-
 </body>
 </html>
